@@ -24,3 +24,4 @@ pnpm-debug.log*
 /backend/logs
 /backend/*.log
 /backend/build
+/backend/uploads
