@@ -11,7 +11,7 @@ const AudioSchema = new Schema(
       required: [true, "Title is required"],
       trim: true,
     },
-    audioPath: {
+    audioId: {
       type: String,
       required: [true, "Audio is required"]
     }
@@ -24,7 +24,7 @@ const AudioSchema = new Schema(
 interface IAudio extends Document {
   userId: string;
   title: string;
-  audioPath: string;
+  audioId: string;
 }
 
 export const Audio = model<IAudio>("Audio", AudioSchema);
