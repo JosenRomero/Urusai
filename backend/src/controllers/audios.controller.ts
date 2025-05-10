@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { analyzeAudio } from "../services/aiService";
 import { pipeline } from "stream/promises";
 import fs from 'fs'; // file system
 import { bucket } from "../database/database";
@@ -20,13 +21,20 @@ class AudiosController {
 
     try {
 
-      const { userId, title } = req.body;
-      const audioPath = req.file?.path;
-
-      if (!audioPath) throw "audio is required";
-      if (!userId || !title) throw "userId and title is required";
-
-      const audioStream = fs.createReadStream(audioPath);
+      const {
+        userId,
+        title,
+        language,
+        targetLanguage
+      } = req.body
+      const audio = req.file
+      const apikey = req.headers.authorization?.split(' ')[1];
+      
+      if (!userId || !title || !language || !targetLanguage) throw { message: "Missing required fields", status: 400 }
+      if (!audio) throw { message: "Audio is required", status: 400 }
+      if (!apikey) throw { message: "API key is required", status: 401 }
+      
+      const audioStream = fs.createReadStream(audio.path);
 
       const uploadStream = bucket.openUploadStream(title);
 
@@ -40,9 +48,11 @@ class AudiosController {
 
       await newAudio.save();
 
-      fs.unlinkSync(audioPath);
+      const text = await analyzeAudio(audio.path, language, targetLanguage, audio.mimetype, apikey);
 
-      res.status(201).json({ message: "Audio saved" });
+      fs.unlinkSync(audio.path);
+
+      res.status(201).json({ message: text });
 
     } catch (error) {
 
