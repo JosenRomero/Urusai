@@ -1,5 +1,6 @@
 import express, { Application } from 'express'
 import path from 'path';
+import cors from 'cors';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -13,6 +14,12 @@ const app: Application = express();
 app.set("port", process.env.PORT || 3001)
 
 app.use(express.json());
+
+// set up cors to allow us to accept requests from our client
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+}))
 
 // Routes
 app.use("/api/audio", audiosRouter);
