@@ -17,7 +17,7 @@ class AudiosController {
     res.json({ message: "Audio" });
   }
 
-  async newAudio(req: Request, res: Response, next: NextFunction) {
+  async uploadAndAnalyzeAudio(req: Request, res: Response, next: NextFunction) {
 
     try {
 
