@@ -17,6 +17,7 @@ pnpm-debug.log*
 /client/dist
 /client/dist-ssr
 /client/*.local
+/client/.env
 
 # Backend (Node.js)
 /backend/node_modules
