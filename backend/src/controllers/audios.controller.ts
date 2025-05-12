@@ -17,6 +17,45 @@ class AudiosController {
     res.json({ message: "Audio" });
   }
 
+  async uploadAudio(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const userId = "123456";
+
+      const { title } = req.body
+      const audio = req.file
+      
+      if (!title) throw { message: "Title is required", status: 400 }
+      if (!audio) throw { message: "Audio is required", status: 400 }
+      
+      const audioStream = fs.createReadStream(audio.path);
+
+      const uploadStream = bucket.openUploadStream(title);
+
+      await pipeline(audioStream, uploadStream);
+
+      const newAudio = new Audio({
+        userId,
+        title,
+        audioId: uploadStream.id
+      });
+
+      await newAudio.save();
+
+      fs.unlinkSync(audio.path);
+
+      res.status(201).json({ message: "Audio saved" });
+
+    } catch (error) {
+
+      if (req.file?.path) fs.unlinkSync(req.file.path);
+      res.status(500).json({ error });
+      
+    }
+
+  }
+
   async uploadAndAnalyzeAudio(req: Request, res: Response, next: NextFunction) {
 
     try {

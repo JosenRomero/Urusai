@@ -9,6 +9,8 @@ router.get("/all-audios/userId/:userId", audiosController.getAudios);
 
 router.get("/:audioId", audiosController.getAudio);
 
+router.post("/uploadAudio", multer.single('audio'), audiosController.uploadAudio);
+
 router.post("/uploadAndAnalyzeAudio", multer.single('audio'), audiosController.uploadAndAnalyzeAudio);
 
 router.put("/:audioId", audiosController.updateAudio);
