@@ -1,4 +1,5 @@
 import express, { Application } from 'express'
+import { clerkMiddleware } from '@clerk/express';
 import path from 'path';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -14,6 +15,8 @@ const app: Application = express();
 app.set("port", process.env.PORT || 3001)
 
 app.use(express.json());
+
+app.use(clerkMiddleware());
 
 // set up cors to allow us to accept requests from our client
 app.use(cors({

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { getAuth } from '@clerk/express'
 import { analyzeAudio } from "../services/aiService";
 import { pipeline } from "stream/promises";
 import fs from 'fs'; // file system
@@ -21,11 +22,12 @@ class AudiosController {
 
     try {
 
-      const userId = "123456";
+      const { userId } = getAuth(req);
 
       const { title } = req.body
       const audio = req.file
       
+      if (!userId) throw { message: "User not authenticated", status: 401 }
       if (!title) throw { message: "Title is required", status: 400 }
       if (!audio) throw { message: "Audio is required", status: 400 }
       
@@ -60,13 +62,11 @@ class AudiosController {
 
     try {
 
-      const userId = "123456";
-
       const { language } = req.body
       const audio = req.file
       const apikey = req.headers.authorization?.split(' ')[1];
       
-      if (!userId || !language) throw { message: "Missing required fields", status: 400 }
+      if (!language) throw { message: "Language is required", status: 400 }
       if (!audio) throw { message: "Audio is required", status: 400 }
       if (!apikey) throw { message: "API key is required", status: 401 }
       
