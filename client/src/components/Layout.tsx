@@ -5,9 +5,9 @@ interface Props {
 }
 const Layout = ({ children }: Props) => {
   return (
-    <div>
+    <div className="min-h-screen grid grid-cols-1 place-content-between bg-zinc-100">
       header
-      {children}
+      <main>{children}</main>
       footer
     </div>
   )
