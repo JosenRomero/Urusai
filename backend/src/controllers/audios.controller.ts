@@ -60,34 +60,17 @@ class AudiosController {
 
     try {
 
-      const {
-        userId,
-        title,
-        language,
-        targetLanguage
-      } = req.body
+      const userId = "123456";
+
+      const { language } = req.body
       const audio = req.file
       const apikey = req.headers.authorization?.split(' ')[1];
       
-      if (!userId || !title || !language || !targetLanguage) throw { message: "Missing required fields", status: 400 }
+      if (!userId || !language) throw { message: "Missing required fields", status: 400 }
       if (!audio) throw { message: "Audio is required", status: 400 }
       if (!apikey) throw { message: "API key is required", status: 401 }
       
-      const audioStream = fs.createReadStream(audio.path);
-
-      const uploadStream = bucket.openUploadStream(title);
-
-      await pipeline(audioStream, uploadStream);
-
-      const newAudio = new Audio({
-        userId,
-        title,
-        audioId: uploadStream.id
-      });
-
-      await newAudio.save();
-
-      const text = await analyzeAudio(audio.path, language, targetLanguage, audio.mimetype, apikey);
+      const text = await analyzeAudio(audio.path, language, audio.mimetype, apikey);
 
       fs.unlinkSync(audio.path);
 

@@ -5,7 +5,7 @@ import {
 import systemPrompt from "../utils/systemPrompt";
 import { getAudioBase64 } from "../utils/utils";
 
-export const analyzeAudio = async (audioPath: string, language: string, targetLanguage: string, mimeType: string, apiKey: string) => {
+export const analyzeAudio = async (audioPath: string, language: string, mimeType: string, apiKey: string) => {
   try {
 
     const ai = new GoogleGenAI({ apiKey });
@@ -13,7 +13,7 @@ export const analyzeAudio = async (audioPath: string, language: string, targetLa
     const audio = getAudioBase64(audioPath);
 
     const contents: ContentListUnion = [
-      { text: systemPrompt(language, targetLanguage) },
+      { text: systemPrompt(language) },
       {
         inlineData: {
           mimeType,

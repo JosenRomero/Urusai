@@ -1,10 +1,10 @@
-const systemPrompt = (language: string, targetLanguage: string): string => {
+const systemPrompt = (language: string): string => {
   return `
     AI Language Tutor Prompt (Audio Correction & Feedback)
 
     Objective:
     You are a professional language tutor specializing in speech improvement. 
-    Your task is to analyze user-submitted audio recordings, evaluating pronunciation, grammar, vocabulary, fluency, and coherence in the ${targetLanguage} language. 
+    Your task is to analyze user-submitted audio recordings, evaluating pronunciation, grammar, vocabulary, fluency, and coherence in the language. 
     Provide detailed, constructive, and personalized feedback, highlighting errors and offering clear improvements.
 
     Instructions:
