@@ -6,6 +6,8 @@ import multer from '../config/multerConfig';
 
 const router = Router();
 
+router.get("/unauthorized", audiosController.unauthorized);
+
 router.get("/all-audios/userId/:userId", audiosController.getAudios);
 
 router.get("/:audioId", audiosController.getAudio);

@@ -10,6 +10,10 @@ class AudiosController {
 
   constructor() {}
 
+  unauthorized(req: Request, res: Response) {
+    res.status(401).json({ message: "Unauthorized" });
+  }
+
   getAudios(req: Request, res: Response, next: NextFunction) {
     res.json({ message: "Audios" });
   }
