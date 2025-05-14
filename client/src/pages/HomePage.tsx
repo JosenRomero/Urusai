@@ -1,11 +1,13 @@
 import { useState } from 'react';
+import { useAuth } from '@clerk/clerk-react';
 import { uploadAudio } from '../services/audioService';
 
 const HomePage = () => {
+  const { getToken } = useAuth();
   const [audioTitle, setAudioTitle] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     
     try {
       e.preventDefault();
@@ -16,7 +18,11 @@ const HomePage = () => {
         formData.append("title", audioTitle);
         formData.append("audio", file);
 
-        uploadAudio(formData);
+        const token = await getToken();
+
+        if (!token) throw { message: "Token is required" }
+
+        uploadAudio(formData, token);
 
       }
 

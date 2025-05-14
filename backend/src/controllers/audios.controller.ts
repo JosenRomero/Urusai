@@ -68,7 +68,7 @@ class AudiosController {
 
       const { language } = req.body
       const audio = req.file
-      const apikey = req.headers.authorization?.split(' ')[1];
+      const apikey = req.headers['x-api-key'] as string;
       
       if (!language) throw { message: "Language is required", status: 400 }
       if (!audio) throw { message: "Audio is required", status: 400 }
