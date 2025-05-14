@@ -9,7 +9,7 @@ interface Props {
 const ProtectedRoute = ({ children }: Props) => {
   const { isLoaded, isSignedIn } = useUser();
 
-  if (!isLoaded) return <div className="flex justify-center">Loading...</div>
+  if (!isLoaded) return <div className="loader"></div>
 
   if (!isSignedIn) return <Navigate to={"/sign-in"} />
 
