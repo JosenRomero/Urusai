@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "install-all": "npm install --prefix client",
-    "build": "npm run build --prefix backend && npm run build --prefix client",
+    "build-all": "npm run build --prefix backend && npm run build --prefix client",
     "backend:start": "npm run start --prefix backend",
     "client:watch": "npm run dev --prefix client",
     "backend:watch": "npm run ts --prefix backend"
