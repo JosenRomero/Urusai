@@ -8,7 +8,7 @@ const router = Router();
 
 router.get("/unauthorized", audiosController.unauthorized);
 
-router.get("/all-audios/userId/:userId", audiosController.getAudios);
+router.get("/my-audios/userId/:userId", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.getAudios);
 
 router.get("/:audioId", audiosController.getAudio);
 

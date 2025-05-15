@@ -1,11 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@clerk/clerk-react';
-import { uploadAudio } from '../services/audioService';
+import { uploadAudio, getAudios } from '../services/audioService';
 
 const HomePage = () => {
-  const { getToken } = useAuth();
+  const { getToken, userId } = useAuth();
   const [audioTitle, setAudioTitle] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
+
+  useEffect(() => {
+
+    const myAudios = async () => {
+
+      try {
+
+        const token = await getToken();
+        if (!token || !userId) throw { message: "Missing required fields" }
+        const result = await getAudios(userId, token);
+
+        console.log(result);
+
+      } catch (err) {
+        console.log(err);
+      }
+      
+    }
+
+    myAudios();
+
+  }, [getToken, userId]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     

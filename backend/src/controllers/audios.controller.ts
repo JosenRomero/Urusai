@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { getAuth } from '@clerk/express'
+import { getAuth } from '@clerk/express';
 import { analyzeAudio } from "../services/aiService";
 import { pipeline } from "stream/promises";
 import fs from 'fs'; // file system
@@ -14,8 +14,25 @@ class AudiosController {
     res.status(401).json({ message: "Unauthorized" });
   }
 
-  getAudios(req: Request, res: Response, next: NextFunction) {
-    res.json({ message: "Audios" });
+  // get "api/audio/my-audios/userId/:userId"
+  async getAudios(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const audios = await Audio.aggregate([
+        {
+          $match: {
+            userId: req.params.userId
+          }
+        }
+      ]);
+
+      res.status(200).json({ audios });
+      
+    } catch (error) {
+      res.status(500).json({ error });
+    }
+
   }
 
   getAudio(req: Request, res: Response, next: NextFunction) {
