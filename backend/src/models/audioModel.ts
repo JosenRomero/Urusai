@@ -14,6 +14,10 @@ const AudioSchema = new Schema(
     audioId: {
       type: String,
       required: [true, "Audio is required"]
+    },
+    mimeType: {
+      type: String,
+      required: [true, "mimeType is required"]
     }
   },
   {
@@ -25,6 +29,7 @@ interface IAudio extends Document {
   userId: string;
   title: string;
   audioId: string;
+  mimeType: string;
 }
 
 export const Audio = model<IAudio>("Audio", AudioSchema);

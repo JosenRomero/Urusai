@@ -61,7 +61,8 @@ class AudiosController {
       const newAudio = new Audio({
         userId,
         title,
-        audioId: uploadStream.id
+        audioId: uploadStream.id,
+        mimeType: audio.mimetype
       });
 
       await newAudio.save();
