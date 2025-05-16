@@ -8,7 +8,7 @@ const Layout = ({ children }: Props) => {
   return (
     <div className="min-h-screen grid grid-cols-1 place-content-between bg-zinc-100">
       <Menu />
-      <main className="flex justify-center">{children}</main>
+      <main className="sm:w-96 md:w-2xl mx-auto">{children}</main>
       footer
     </div>
   )

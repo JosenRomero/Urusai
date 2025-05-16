@@ -61,8 +61,8 @@ const HomePage = () => {
   }
 
   return (
-    <div className='flex justify-center'>
-      <form className="rounded-2xl bg-white px-4 py-10 shadow-md ring-1 ring-black/5 sm:w-96 sm:px-8" onSubmit={handleSubmit}>
+    <div className='flex flex-col gap-16'>
+      <form className="rounded-2xl bg-white px-4 py-10 shadow-md ring-1 ring-black/5 sm:px-8" onSubmit={handleSubmit}>
         <div className="mb-5">
           <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900">Audio title</label>
           <input 
