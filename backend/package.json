@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "ts:": "tsc",
+    "ts": "tsc",
     "start": "node build/index.js",
-    "ts:w": "tsc -w"
+    "dev": "tsc -w"
   },
   "keywords": [],
   "author": "",
