@@ -1,4 +1,7 @@
-import { Audio } from "../types/Audio"
+import { useAuth } from '@clerk/clerk-react';
+import { Audio } from "../types/Audio";
+import { getAudio } from "../services/audioService";
+import PlayIcon from '../icons/PlayIcon';
 
 interface Props {
   title: string,
@@ -7,6 +10,7 @@ interface Props {
 }
 
 const ShowAudios = ({ title, audios, isLoaded }: Props) => {
+  const { getToken } = useAuth();
 
   const getAudioDate = (date: string) => {
 
@@ -16,6 +20,39 @@ const ShowAudios = ({ title, audios, isLoaded }: Props) => {
       day: "numeric"
     })
     
+  }
+
+  const playAudio = async (audioId: string, title: string) => {
+
+    try {
+
+      const token = await getToken();
+      if (!token) throw { message: "Missing required fields" }
+      const response = await getAudio(audioId, token);
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw { message: errData.message || "Something went wrong." }
+      }
+
+      const audioBlob = await response.blob();
+      const url = URL.createObjectURL(audioBlob);
+      
+      const audioPlayerContainer = document.getElementById("audioPlayerContainer") as HTMLDivElement
+      const audioPlayer = document.getElementById("audioPlayer") as HTMLAudioElement
+      const audioTitle = document.getElementById("audioTitle") as HTMLParagraphElement 
+
+      if (audioPlayerContainer.classList.contains("hidden")) {
+        audioPlayerContainer.classList.remove("hidden");
+      }
+
+      audioPlayer.src = url
+      audioTitle.innerHTML = title
+      
+    } catch (err) {
+      console.log(err);
+    }
+
   }
 
   return (
@@ -30,7 +67,14 @@ const ShowAudios = ({ title, audios, isLoaded }: Props) => {
             <tbody>
               {audios.map((audio) => {
                 return (
-                  <tr className="border-b border-gray-200" key={audio._id}>
+                  <tr
+                    className="border-b border-gray-200 hover:cursor-pointer hover:bg-sky-100"
+                    onClick={() => playAudio(audio.audioId, audio.title)}
+                    key={audio._id}
+                  >
+                    <td className="px-6 py-4">
+                      <PlayIcon />
+                    </td>
                     <td className="px-6 py-4">{audio.title}</td>
                     <td className="px-6 py-4">{getAudioDate(audio.createdAt)}</td>
                   </tr>
