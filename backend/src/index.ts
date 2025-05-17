@@ -3,6 +3,8 @@ import { clerkMiddleware } from '@clerk/express';
 import path from 'path';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import notFound from './middlewares/notFound';
+import handleErrors from './middlewares/handleErrors';
 
 dotenv.config();
 
@@ -28,6 +30,9 @@ app.use(cors({
 app.use("/api/audio", audiosRouter);
 
 app.use("/uploads", express.static(path.resolve("uploads")));
+
+app.use(notFound);
+app.use(handleErrors);
 
 // Starting the server
 app.listen(app.get("port"), () => {

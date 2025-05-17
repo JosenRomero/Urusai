@@ -31,7 +31,7 @@ class AudiosController {
       res.status(200).json({ audios });
       
     } catch (error) {
-      res.status(500).json({ error });
+      next(error);
     }
 
   }
@@ -60,7 +60,7 @@ class AudiosController {
       downloadStream.pipe(res);
 
     } catch (error) {
-      res.status(500).json({ error });
+      next(error);
     }
 
   }
@@ -100,7 +100,7 @@ class AudiosController {
     } catch (error) {
 
       if (req.file?.path) fs.unlinkSync(req.file.path);
-      res.status(500).json({ error });
+      next(error);
       
     }
 
@@ -127,7 +127,7 @@ class AudiosController {
     } catch (error) {
 
       if (req.file?.path) fs.unlinkSync(req.file.path);
-      res.status(500).json({ error });
+      next(error);
       
     }
     
