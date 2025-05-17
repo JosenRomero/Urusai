@@ -5,6 +5,7 @@ import { pipeline } from "stream/promises";
 import fs from 'fs'; // file system
 import { bucket } from "../database/database";
 import { Audio } from "../models/audioModel";
+import mongoose from "mongoose";
 
 class AudiosController {
 
@@ -35,8 +36,33 @@ class AudiosController {
 
   }
 
-  getAudio(req: Request, res: Response, next: NextFunction) {
-    res.json({ message: "Audio" });
+  async getAudio(req: Request, res: Response, next: NextFunction) {
+    
+    try {
+
+      const audioId = req.params.audioId;
+
+      if (!audioId) throw { message: "AudioId is required", status: 400 }
+      
+      const id = new mongoose.Types.ObjectId(audioId);
+
+      const file = await Audio.findOne({ audioId });
+
+      if (!file) throw { message: "Audio not found", status: 404 }
+
+      // create a stream to read from the bucket
+      const downloadStream = bucket.openDownloadStream(id);
+
+      res.setHeader('Content-Type', file.mimeType);
+      res.setHeader('Accept-Ranges', 'bytes');
+
+      // pipe the stream to the response
+      downloadStream.pipe(res);
+
+    } catch (error) {
+      res.status(500).json({ error });
+    }
+
   }
 
   async uploadAudio(req: Request, res: Response, next: NextFunction) {
