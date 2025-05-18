@@ -95,7 +95,7 @@ class AudiosController {
 
       fs.unlinkSync(audio.path);
 
-      res.status(201).json({ message: "Audio saved" });
+      res.status(201).json({ successMessage: "Audio saved" });
 
     } catch (error) {
 
@@ -122,7 +122,7 @@ class AudiosController {
 
       fs.unlinkSync(audio.path);
 
-      res.status(201).json({ message: text });
+      res.status(201).json({ text });
 
     } catch (error) {
 

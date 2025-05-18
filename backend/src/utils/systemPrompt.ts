@@ -26,7 +26,9 @@ const systemPrompt = (language: string): string => {
       Grammar: You said, "She go to school" → Correct: "She goes to school" (3rd-person ‘s’).
       Fluency: Great pacing! Reduce filler words like "uhhh"—try pausing instead.
 
-    The answer must be in ${language}
+    The answer must be in ${language}.
+    And the answer must be with plain text only. 
+    Do not use asterisks (*) or markdown.
   `
 }
 
