@@ -4,6 +4,9 @@ import { uploadAudio, getAudios } from '../services/audioService';
 import { Audio } from '../types/Audio';
 import ShowAudios from '../components/ShowAudios';
 import SoundRecorder from '../components/SoundRecorder';
+import Notification from '../components/Notification';
+import { notificationMessageDefault } from '../consts/notificationMessageDefault';
+import { NotificationMessage } from '../types/NotificationMessage';
 
 const HomePage = () => {
   const { getToken, userId } = useAuth();
@@ -12,6 +15,7 @@ const HomePage = () => {
   const [myAudios, setMyAudios] = useState<Audio[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [isRecordAudio, setIsRecordAudio] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
 
   useEffect(() => {
 
@@ -20,13 +24,20 @@ const HomePage = () => {
       try {
 
         const token = await getToken();
-        if (!token || !userId) throw { message: "Missing required fields" }
+        if (!token || !userId) throw new Error("Missing required fields");
         const { audios } = await getAudios(userId, token);
         setMyAudios(audios);
         setIsLoaded(true);
 
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        let msg = "Something went wrong."
+
+        if (error instanceof Error) msg = error.message
+        
+        setNotificationMessage({
+          text: msg,
+          isError: true
+        });
       }
       
     }
@@ -48,14 +59,30 @@ const HomePage = () => {
 
         const token = await getToken();
 
-        if (!token) throw { message: "Token is required" }
+        if (!token) throw new Error("Token is required");
 
-        uploadAudio(formData, token);
+        const { successMessage, message } = await uploadAudio(formData, token);
+
+        if (message) throw new Error(message);
+
+        setNotificationMessage({
+          text: successMessage,
+          isError: false
+        })
 
       }
 
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+
+      let msg = "Something went wrong."
+
+      if (error instanceof Error) msg = error.message
+      
+      setNotificationMessage({
+        text: msg,
+        isError: true
+      });
+
     }
     
   }
@@ -123,6 +150,11 @@ const HomePage = () => {
         title={"My Audios"}
         audios={myAudios}
         isLoaded={isLoaded}
+      />
+
+      <Notification
+        message={notificationMessage}
+        notificationClose={ () => setNotificationMessage(notificationMessageDefault) }
       />
 
     </div>

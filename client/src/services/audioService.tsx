@@ -48,7 +48,6 @@ export const uploadAudio = async (data: FormData, token: string) => {
     body: data
   })
 
-  const result = await response.json();
+  return await response.json();
 
-  console.log(result);
 }

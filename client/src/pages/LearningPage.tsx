@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import { uploadAndAnalyzeAudio } from '../services/audioService';
 import SoundRecorder from '../components/SoundRecorder';
+import Notification from '../components/Notification';
+import { NotificationMessage } from '../types/NotificationMessage';
+import { notificationMessageDefault } from '../consts/notificationMessageDefault';
 
 const LearningPage = () => {
   const { getToken } = useAuth();
@@ -11,6 +14,7 @@ const LearningPage = () => {
   const [isLoaded, setIsLoaded] = useState<boolean | null>(null);
   const [text, setText] = useState<string | null>(null);
   const [isRecordAudio, setIsRecordAudio] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     
@@ -27,19 +31,28 @@ const LearningPage = () => {
 
         const token = await getToken();
 
-        if (!token) throw { message: "Token is required" }
+        if (!token) throw new Error("Token is required");
 
         const { text, message } = await uploadAndAnalyzeAudio(formData, token, apikey);
         
-        if (!text) throw { message }
+        if (!text) throw new Error(message);
 
         setIsLoaded(true);
         setText(text);
 
+      } else {
+        throw new Error("Missing required fields");
       }
 
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      let msg = "Something went wrong."
+
+      if (error instanceof Error) msg = error.message
+        
+      setNotificationMessage({
+        text: msg,
+        isError: true
+      });
     }
     
   }
@@ -120,6 +133,12 @@ const LearningPage = () => {
       { isLoaded === false && <div className="loader mx-auto"></div> }
 
       { isLoaded && <p className="text-xl text-gray-900 ">{text}</p>}
+
+      <Notification
+        message={notificationMessage}
+        notificationClose={ () => setNotificationMessage(notificationMessageDefault) }
+      />
+
     </div>
   )
 }
