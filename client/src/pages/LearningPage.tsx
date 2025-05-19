@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import { uploadAndAnalyzeAudio } from '../services/audioService';
+import SoundRecorder from '../components/SoundRecorder';
 
 const LearningPage = () => {
   const { getToken } = useAuth();
@@ -9,6 +10,7 @@ const LearningPage = () => {
   const [language, setLanguage] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState<boolean | null>(null);
   const [text, setText] = useState<string | null>(null);
+  const [isRecordAudio, setIsRecordAudio] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     
@@ -48,22 +50,46 @@ const LearningPage = () => {
     setFile(audio)
   }
 
+  const handleRecordAudio = (audioBlob: Blob) => {
+    const myFile = new File([audioBlob], "audio-recording.wav", {
+      type: "audio/wav",
+      lastModified: Date.now()
+    });
+    setFile(myFile);
+  }
+
   return (
     <div>
       { isLoaded === null && (
         <form className="rounded-2xl bg-white px-4 py-10 shadow-md ring-1 ring-black/5 sm:px-8" onSubmit={handleSubmit}>
+          
+          { !isRecordAudio ? (
+            <div className="mb-5">
+              <label className="block mb-2 text-sm font-medium text-gray-900" htmlFor="audio">Upload audio</label>
+              <input
+                className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none p-2.5"
+                id="audio"
+                type="file"
+                accept="audio/mp3,audio/ogg,audio/wav"
+                onChange={(e) => handleAudio(e)}
+                aria-describedby="upload_audio"
+                required
+              />
+            </div>
+          ) : (
+            <SoundRecorder handleRecordAudio={handleRecordAudio} />
+          ) }
+
           <div className="mb-5">
-            <label className="block mb-2 text-sm font-medium text-gray-900" htmlFor="audio">Upload audio</label>
-            <input
-              className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none p-2.5"
-              id="audio"
-              type="file"
-              accept="audio/mp3,audio/ogg,audio/wav"
-              onChange={(e) => handleAudio(e)}
-              aria-describedby="upload_audio"
-              required
-            />
+            <button
+              type="button"
+              className="text-sm text-blue-600 hover:cursor-pointer flex w-full justify-end"
+              onClick={() => setIsRecordAudio(!isRecordAudio)}
+            >
+              { isRecordAudio ? <>or load audio</> : <>or record audio</>}
+            </button>
           </div>
+
           <div className='mb-5'>
             <label htmlFor='apikey' className="block mb-2 text-sm font-medium text-gray-900">Your Gemini api key</label>
             <input 
