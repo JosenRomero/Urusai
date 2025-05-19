@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify"
 import { ReactNode } from "react"
 import Menu from "./Menu"
 import AudioPlayer from "./AudioPlayer"
@@ -11,6 +12,7 @@ const Layout = ({ children }: Props) => {
       <Menu />
       <main className="sm:w-96 md:w-2xl mx-auto">{children}</main>
       <div>
+        <ToastContainer />
         <AudioPlayer />
         footer
       </div>
