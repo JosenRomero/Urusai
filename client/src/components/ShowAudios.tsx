@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import { Audio } from "../types/Audio";
 import { getAudio } from "../services/audioService";
 import PlayIcon from '../icons/PlayIcon';
+import { NotificationMessage } from '../types/NotificationMessage';
+import { notificationMessageDefault } from '../consts/notificationMessageDefault';
+import Notification from './Notification';
 
 interface Props {
   title: string,
@@ -11,6 +15,7 @@ interface Props {
 
 const ShowAudios = ({ title, audios, isLoaded }: Props) => {
   const { getToken } = useAuth();
+  const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
 
   const getAudioDate = (date: string) => {
 
@@ -27,12 +32,12 @@ const ShowAudios = ({ title, audios, isLoaded }: Props) => {
     try {
 
       const token = await getToken();
-      if (!token) throw { message: "Missing required fields" }
+      if (!token) throw new Error("Missing required fields");
       const response = await getAudio(audioId, token);
 
       if (!response.ok) {
         const errData = await response.json();
-        throw { message: errData.message || "Something went wrong." }
+        throw new Error(errData.message);
       }
 
       const audioBlob = await response.blob();
@@ -49,8 +54,15 @@ const ShowAudios = ({ title, audios, isLoaded }: Props) => {
       audioPlayer.src = url
       audioTitle.innerHTML = title
       
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      let msg = "Something went wrong."
+
+      if (error instanceof Error) msg = error.message
+        
+      setNotificationMessage({
+        text: msg,
+        isError: true
+      });
     }
 
   }
@@ -84,6 +96,12 @@ const ShowAudios = ({ title, audios, isLoaded }: Props) => {
           </table>
         )}
       </div>
+
+      <Notification
+        message={notificationMessage}
+        notificationClose={ () => setNotificationMessage(notificationMessageDefault) }
+      />
+
     </div>
   )
 }
