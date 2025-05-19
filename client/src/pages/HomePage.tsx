@@ -3,6 +3,7 @@ import { useAuth } from '@clerk/clerk-react';
 import { uploadAudio, getAudios } from '../services/audioService';
 import { Audio } from '../types/Audio';
 import ShowAudios from '../components/ShowAudios';
+import SoundRecorder from '../components/SoundRecorder';
 
 const HomePage = () => {
   const { getToken, userId } = useAuth();
@@ -10,6 +11,7 @@ const HomePage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [myAudios, setMyAudios] = useState<Audio[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [isRecordAudio, setIsRecordAudio] = useState(false);
 
   useEffect(() => {
 
@@ -64,6 +66,14 @@ const HomePage = () => {
     setFile(audio)
   }
 
+  const handleRecordAudio = (audioBlob: Blob) => {
+    const myFile = new File([audioBlob], "audio-recording.wav", {
+      type: "audio/wav",
+      lastModified: Date.now()
+    });
+    setFile(myFile);
+  }
+
   return (
     <div className='flex flex-col gap-16'>
       <form className="rounded-2xl bg-white px-4 py-10 shadow-md ring-1 ring-black/5 sm:px-8" onSubmit={handleSubmit}>
@@ -78,18 +88,34 @@ const HomePage = () => {
             required
           />
         </div>
+
+        { !isRecordAudio ? (
+          <div className="mb-5">
+            <label className="block mb-2 text-sm font-medium text-gray-900" htmlFor="audio">Load audio</label>
+            <input
+              className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none p-2.5"
+              id="audio"
+              type="file"
+              accept="audio/mp3,audio/ogg,audio/wav"
+              onChange={(e) => handleAudio(e)}
+              aria-describedby="upload_audio"
+              required
+            />
+          </div>
+        ) : (
+          <SoundRecorder handleRecordAudio={handleRecordAudio} />
+        ) }
+
         <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900" htmlFor="audio">Upload audio</label>
-          <input
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none p-2.5"
-            id="audio"
-            type="file"
-            accept="audio/mp3,audio/ogg,audio/wav"
-            onChange={(e) => handleAudio(e)}
-            aria-describedby="upload_audio"
-            required
-          />
+          <button
+            type="button"
+            className="text-sm text-blue-600 hover:cursor-pointer flex w-full justify-end"
+            onClick={() => setIsRecordAudio(!isRecordAudio)}
+          >
+            { isRecordAudio ? <>or load audio</> : <>or record audio</>}
+          </button>
         </div>
+
         <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">upload Audio</button>
       </form>
 
