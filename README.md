@@ -39,7 +39,7 @@ Frontend:
 
 ## Demo
 
-![demo](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/demo.mp4)
+![demo](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/demo.gif)
 
 ## Deploy 
 
