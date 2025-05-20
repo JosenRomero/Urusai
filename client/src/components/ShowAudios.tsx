@@ -75,25 +75,31 @@ const ShowAudios = ({ title, audios, isLoaded }: Props) => {
         {!isLoaded ? (
           <div className="loader mx-auto"></div>
         ) : (
-          <table className="w-full text-xl text-left rtl:text-right text-slate-800">
-            <tbody>
-              {audios.map((audio) => {
-                return (
-                  <tr
-                    className="border-b border-gray-200 hover:cursor-pointer hover:bg-sky-100"
-                    onClick={() => playAudio(audio.audioId, audio.title)}
-                    key={audio._id}
-                  >
-                    <td className="px-6 py-4">
-                      <PlayIcon />
-                    </td>
-                    <td className="px-6 py-4">{audio.title}</td>
-                    <td className="px-6 py-4">{getAudioDate(audio.createdAt)}</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+          <>
+            { audios && audios.length > 0 ? (
+              <table className="w-full text-xl text-left rtl:text-right text-slate-800">
+                <tbody>
+                  {audios.map((audio) => {
+                    return (
+                      <tr
+                        className="border-b border-gray-200 hover:cursor-pointer hover:bg-sky-100"
+                        onClick={() => playAudio(audio.audioId, audio.title)}
+                        key={audio._id}
+                      >
+                        <td className="px-6 py-4">
+                          <PlayIcon />
+                        </td>
+                        <td className="px-6 py-4">{audio.title}</td>
+                        <td className="px-6 py-4">{getAudioDate(audio.createdAt)}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <p className="w-full text-center mt-10">No saved audio files.</p>
+            )}
+          </>
         )}
       </div>
 

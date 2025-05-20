@@ -25,9 +25,13 @@ const HomePage = () => {
 
         const token = await getToken();
         if (!token || !userId) throw new Error("Missing required fields");
-        const { audios } = await getAudios(userId, token);
-        setMyAudios(audios);
+        const { audios, message } = await getAudios(userId, token);
+
         setIsLoaded(true);
+        
+        if (message) throw new Error(message);
+
+        setMyAudios(audios);
 
       } catch (error) {
         let msg = "Something went wrong."
