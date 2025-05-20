@@ -2,6 +2,7 @@ import { ToastContainer } from "react-toastify"
 import { ReactNode } from "react"
 import Menu from "./Menu"
 import AudioPlayer from "./AudioPlayer"
+import Footer from "./Footer"
 
 interface Props {
   children: ReactNode
@@ -14,7 +15,7 @@ const Layout = ({ children }: Props) => {
       <div>
         <ToastContainer />
         <AudioPlayer />
-        footer
+        <Footer />
       </div>
     </div>
   )
