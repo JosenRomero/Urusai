@@ -8,12 +8,14 @@ interface Props {
   updateAudioTitle(title: string): void
   updateIsRecordAudio(isRecordAudio: boolean): void
   isRecordAudio: boolean
+  formRef: React.Ref<HTMLFormElement>
+  audioRef: React.Ref<HTMLAudioElement>
 }
 
-const AudioUploadForm = ({ handleSubmit, handleAudio, handleRecordAudio, updateAudioTitle, updateIsRecordAudio, isRecordAudio }: Props) => {
+const AudioUploadForm = ({ handleSubmit, handleAudio, handleRecordAudio, updateAudioTitle, updateIsRecordAudio, isRecordAudio, formRef, audioRef }: Props) => {
   
   return (
-    <form className="rounded-2xl bg-white px-4 py-10 shadow-md ring-1 ring-black/5 sm:px-8" onSubmit={handleSubmit}>
+    <form ref={formRef} className="rounded-2xl bg-white px-4 py-10 shadow-md ring-1 ring-black/5 sm:px-8" onSubmit={handleSubmit}>
       <div className="mb-5">
         <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900">Audio title</label>
         <input 
@@ -40,7 +42,7 @@ const AudioUploadForm = ({ handleSubmit, handleAudio, handleRecordAudio, updateA
           />
         </div>
       ) : (
-          <SoundRecorder handleRecordAudio={handleRecordAudio} />
+          <SoundRecorder handleRecordAudio={handleRecordAudio} audioRef={audioRef} />
       ) }
 
       <div className="mb-5">

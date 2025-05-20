@@ -90,7 +90,7 @@ const LearningPage = () => {
               />
             </div>
           ) : (
-            <SoundRecorder handleRecordAudio={handleRecordAudio} />
+            <SoundRecorder handleRecordAudio={handleRecordAudio} audioRef={null} />
           ) }
 
           <div className="mb-5">

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import { uploadAudio, getAudios } from '../services/audioService';
 import { Audio } from '../types/Audio';
@@ -15,6 +15,8 @@ const HomePage = () => {
   const [myAudios, setMyAudios] = useState<Audio[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [isRecordAudio, setIsRecordAudio] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
 
   const myAllAudios = useCallback( async () => {
@@ -73,6 +75,10 @@ const HomePage = () => {
           isError: false
         });
 
+        // reset form
+        if (formRef.current) formRef.current.reset();
+        if (audioRef.current) audioRef.current.remove();
+        
         myAllAudios();
 
       } else {
@@ -121,7 +127,8 @@ const HomePage = () => {
         updateAudioTitle={updateAudioTitle}
         updateIsRecordAudio={updateIsRecordAudio}
         isRecordAudio={isRecordAudio}
-        
+        formRef={formRef}
+        audioRef={audioRef}
       />
       <ShowAudios
         title={"My Audios"}

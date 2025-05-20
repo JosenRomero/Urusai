@@ -6,9 +6,10 @@ import Notification from "./Notification";
 
 interface Props {
   handleRecordAudio(audioBlob: Blob): void
+  audioRef: React.Ref<HTMLAudioElement>
 }
 
-const SoundRecorder = ({ handleRecordAudio }: Props) => {
+const SoundRecorder = ({ handleRecordAudio, audioRef }: Props) => {
   
   const audioChunk = useRef<Blob[]>([]);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -93,7 +94,7 @@ const SoundRecorder = ({ handleRecordAudio }: Props) => {
 
       {audioUrl && (
         <div className="my-7 flex justify-center">
-          <audio src={audioUrl} controls />
+          <audio ref={audioRef} src={audioUrl} controls />
         </div>
       )}
 
