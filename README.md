@@ -26,3 +26,21 @@ Frontend:
 - TypeScript
 - **Clerk** - User authentication (login, sign-up) and client-side session handling.
 - Tailwindcss
+
+## Screenshots
+
+![imagen 1](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/img1.png)
+
+![imagen 2](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/img2.png)
+
+![imagen 3](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/img3.png)
+
+![imagen 4](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/img4.png)
+
+## Demo
+
+![demo](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/demo.mp4)
+
+## Deploy 
+
+[https://urusai.vercel.app](https://urusai.vercel.app)
