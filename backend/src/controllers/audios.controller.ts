@@ -148,8 +148,41 @@ class AudiosController {
     res.json({ message: "update audio" });
   }
 
-  deleteAudio(req: Request, res: Response, next: NextFunction) {
-    res.json({ message: "delete audio" });
+  async deleteAudio(req: Request, res: Response, next: NextFunction) {
+
+    const mongooseTransaction = await mongoose.startSession();
+    mongooseTransaction.startTransaction();
+    
+    try {
+      
+      const { userId } = getAuth(req);
+      const audioId = req.params.audioId;
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+      if (!audioId) throw { message: "AudioId is required", status: 400 }
+
+      const audio = await Audio.findOneAndDelete({
+        audioId,
+        userId
+      }).session(mongooseTransaction);
+
+      if (!audio) throw { message: "Audio not found or you do not have permission to delete it", status: 404 }
+
+      const id = new mongoose.Types.ObjectId(audioId);
+
+      await bucket.delete(id);
+
+      await mongooseTransaction.commitTransaction();
+
+      res.status(200).json({ successMessage: "Audio deleted" });
+      
+    } catch (error) {
+      await mongooseTransaction.abortTransaction();
+      next(error);
+    } finally {
+      mongooseTransaction.endSession();
+    }
+
   }
 
 }

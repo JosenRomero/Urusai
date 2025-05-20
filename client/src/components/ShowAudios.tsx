@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import { Audio } from "../types/Audio";
-import { getAudio } from "../services/audioService";
+import { getAudio, deleteAudio } from "../services/audioService";
 import PlayIcon from '../icons/PlayIcon';
 import { NotificationMessage } from '../types/NotificationMessage';
 import { notificationMessageDefault } from '../consts/notificationMessageDefault';
 import Notification from './Notification';
+import Trash from '../icons/Trash';
 
 interface Props {
   title: string,
@@ -67,6 +68,37 @@ const ShowAudios = ({ title, audios, isLoaded }: Props) => {
 
   }
 
+  const removeAudio = async (audioId: string) => {
+
+    try {
+
+      const token = await getToken();
+      if (!token) throw new Error("Token is required");
+
+      const { successMessage, message } = await deleteAudio(audioId, token);
+
+      if (message) throw new Error(message);
+
+      setNotificationMessage({
+        text: successMessage,
+        isError: false
+      });
+      
+    } catch (error) {
+      let msg = "Something went wrong."
+
+      if (error instanceof Error) msg = error.message
+        
+      setNotificationMessage({
+        text: msg,
+        isError: true
+      });
+
+      // refresh page
+    }
+
+  }
+
   return (
     <div>
       <h2 className='text-2xl font-bold text-slate-800'>{title}</h2>
@@ -82,15 +114,26 @@ const ShowAudios = ({ title, audios, isLoaded }: Props) => {
                   {audios.map((audio) => {
                     return (
                       <tr
-                        className="border-b border-gray-200 hover:cursor-pointer hover:bg-sky-100"
-                        onClick={() => playAudio(audio.audioId, audio.title)}
+                        className="border-b border-gray-200"
                         key={audio._id}
                       >
-                        <td className="px-6 py-4">
+                        <td 
+                          className="px-6 py-4 hover:cursor-pointer hover:bg-sky-100"
+                          onClick={() => playAudio(audio.audioId, audio.title)}
+                        >
                           <PlayIcon />
                         </td>
                         <td className="px-6 py-4">{audio.title}</td>
                         <td className="px-6 py-4">{getAudioDate(audio.createdAt)}</td>
+                        <td className="px-6 py-4">
+                          <button 
+                            type="button" 
+                            className="text-slate-800 hover:text-red-700 hover:cursor-pointer"
+                            onClick={ () => removeAudio(audio.audioId) }
+                          >
+                            <Trash />
+                          </button>
+                        </td>
                       </tr>
                     )
                   })}

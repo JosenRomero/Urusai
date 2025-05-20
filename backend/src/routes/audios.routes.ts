@@ -16,8 +16,8 @@ router.post("/uploadAudio", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_U
 
 router.post("/uploadAndAnalyzeAudio", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), multer.single('audio'), audiosController.uploadAndAnalyzeAudio);
 
-router.put("/:audioId", audiosController.updateAudio);
+router.put("/:audioId", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.updateAudio);
 
-router.delete("/:audioId", audiosController.deleteAudio);
+router.delete("/:audioId", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.deleteAudio);
 
 export default router;
