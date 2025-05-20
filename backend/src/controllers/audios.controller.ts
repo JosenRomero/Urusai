@@ -77,6 +77,17 @@ class AudiosController {
       if (!userId) throw { message: "User not authenticated", status: 401 }
       if (!title) throw { message: "Title is required", status: 400 }
       if (!audio) throw { message: "Audio is required", status: 400 }
+
+      // check the number of audios
+      const allAudios = await Audio.aggregate([
+        {
+          $match: {
+            userId: userId
+          }
+        }
+      ])
+
+      if (allAudios.length >= 5) throw { message: "You have reached the maximum number of audio uploads allowed (limit: 5)", status: 403 }
       
       const audioStream = fs.createReadStream(audio.path);
 
