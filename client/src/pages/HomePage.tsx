@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import { uploadAudio, getAudios } from '../services/audioService';
 import { Audio } from '../types/Audio';
@@ -17,38 +17,37 @@ const HomePage = () => {
   const [isRecordAudio, setIsRecordAudio] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
 
-  useEffect(() => {
+  const myAllAudios = useCallback( async () => {
 
-    const myAudios = async () => {
+    try {
+      const token = await getToken()
+      if (!token || !userId) throw new Error("Missing required fields");
+      const { audios, message } = await getAudios(userId, token);
 
-      try {
+      setIsLoaded(true);
 
-        const token = await getToken();
-        if (!token || !userId) throw new Error("Missing required fields");
-        const { audios, message } = await getAudios(userId, token);
+      if (message) throw new Error(message);
 
-        setIsLoaded(true);
-        
-        if (message) throw new Error(message);
+      setMyAudios(audios);
 
-        setMyAudios(audios);
+    } catch (error) {
+      let msg = "Something went wrong."
 
-      } catch (error) {
-        let msg = "Something went wrong."
+      if (error instanceof Error) msg = error.message
 
-        if (error instanceof Error) msg = error.message
-        
-        setNotificationMessage({
-          text: msg,
-          isError: true
-        });
-      }
-      
+      setNotificationMessage({
+        text: msg,
+        isError: true,
+      });
     }
 
-    myAudios();
-
   }, [getToken, userId]);
+
+  useEffect(() => {
+
+    myAllAudios();
+    
+  }, [myAllAudios]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     
@@ -72,8 +71,12 @@ const HomePage = () => {
         setNotificationMessage({
           text: successMessage,
           isError: false
-        })
+        });
 
+        myAllAudios();
+
+      } else {
+        throw new Error("Missing required fields");
       }
 
     } catch (error) {
