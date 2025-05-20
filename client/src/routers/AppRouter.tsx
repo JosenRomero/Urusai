@@ -5,6 +5,7 @@ import NotFoundPage from '../pages/NotFoundPage';
 import LearningPage from '../pages/LearningPage';
 import SignInPage from '../pages/SignInPage';
 import ProtectedRoute from './ProtectedRoute';
+import AllAudiosPage from '../pages/AllAudiosPage';
 
 const AppRouter = () => {
   return (
@@ -25,6 +26,14 @@ const AppRouter = () => {
               element={
                 <ProtectedRoute>
                   <LearningPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path='all-audios' 
+              element={
+                <ProtectedRoute>
+                  <AllAudiosPage />
                 </ProtectedRoute>
               }
             />

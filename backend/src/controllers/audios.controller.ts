@@ -15,6 +15,30 @@ class AudiosController {
     res.status(401).json({ message: "Unauthorized" });
   }
 
+  // get "api/audio/all-audios"
+  async getAllAudios(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const allAudios = await Audio.aggregate([
+        { 
+          $sort: { 
+            createdAt: -1 
+          } 
+        }, 
+        {
+          $limit: 10
+        }
+      ]);
+
+      res.status(200).json({ allAudios });
+      
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
   // get "api/audio/my-audios/userId/:userId"
   async getAudios(req: Request, res: Response, next: NextFunction) {
 

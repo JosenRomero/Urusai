@@ -1,4 +1,17 @@
 
+export const getAllAudios = async (token: string) => {
+
+  const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/audio/all-audios`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+
+  return await response.json();
+
+}
+
 export const getAudios = async (userId: string, token: string) => {
 
   const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/audio/my-audios/userId/${userId}`, {
