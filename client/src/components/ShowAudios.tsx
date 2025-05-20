@@ -12,9 +12,10 @@ interface Props {
   title: string,
   audios: Audio[],
   isLoaded: boolean
+  myAllAudios(): void
 }
 
-const ShowAudios = ({ title, audios, isLoaded }: Props) => {
+const ShowAudios = ({ title, audios, isLoaded, myAllAudios }: Props) => {
   const { getToken } = useAuth();
   const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
 
@@ -83,6 +84,8 @@ const ShowAudios = ({ title, audios, isLoaded }: Props) => {
         text: successMessage,
         isError: false
       });
+
+      myAllAudios(); // refresh audios list
       
     } catch (error) {
       let msg = "Something went wrong."
@@ -94,7 +97,6 @@ const ShowAudios = ({ title, audios, isLoaded }: Props) => {
         isError: true
       });
 
-      // refresh page
     }
 
   }

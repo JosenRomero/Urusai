@@ -134,6 +134,7 @@ const HomePage = () => {
         title={"My Audios"}
         audios={myAudios}
         isLoaded={isLoaded}
+        myAllAudios={myAllAudios}
       />
       <Notification
         message={notificationMessage}
