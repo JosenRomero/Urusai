@@ -12,10 +12,11 @@ interface Props {
   title: string,
   audios: Audio[],
   isLoaded: boolean
+  IsMyList: boolean
   myAllAudios(): void
 }
 
-const ShowAudios = ({ title, audios, isLoaded, myAllAudios }: Props) => {
+const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios }: Props) => {
   const { getToken } = useAuth();
   const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
 
@@ -127,15 +128,19 @@ const ShowAudios = ({ title, audios, isLoaded, myAllAudios }: Props) => {
                         </td>
                         <td className="px-6 py-4">{audio.title}</td>
                         <td className="px-6 py-4">{getAudioDate(audio.createdAt)}</td>
-                        <td className="px-6 py-4">
-                          <button 
-                            type="button" 
-                            className="text-slate-800 hover:text-red-700 hover:cursor-pointer"
-                            onClick={ () => removeAudio(audio.audioId) }
-                          >
-                            <Trash />
-                          </button>
-                        </td>
+
+                        { IsMyList && (
+                          <td className="px-6 py-4">
+                            <button 
+                              type="button" 
+                              className="text-slate-800 hover:text-red-700 hover:cursor-pointer"
+                              onClick={ () => removeAudio(audio.audioId) }
+                            >
+                              <Trash />
+                            </button>
+                          </td>
+                        )}
+
                       </tr>
                     )
                   })}

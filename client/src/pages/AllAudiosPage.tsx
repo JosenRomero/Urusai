@@ -53,6 +53,7 @@ const AllAudiosPage = () => {
         title="Latest audios added"
         audios={audios}
         isLoaded={isLoaded}
+        IsMyList={false}
         myAllAudios={() => console.log("")}
       />
       <Notification

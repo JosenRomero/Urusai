@@ -134,8 +134,16 @@ const HomePage = () => {
         title={"My Audios"}
         audios={myAudios}
         isLoaded={isLoaded}
+        IsMyList={true}
         myAllAudios={myAllAudios}
       />
+
+      { myAudios && myAudios.length > 0 && (
+          <div>
+            <a className="hover:!underline" href='all-audios'>Latest audios</a>
+          </div>
+      )}
+
       <Notification
         message={notificationMessage}
         notificationClose={ () => setNotificationMessage(notificationMessageDefault) }
