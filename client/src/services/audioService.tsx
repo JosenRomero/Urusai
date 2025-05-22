@@ -1,7 +1,7 @@
 
 export const getAllAudios = async (token: string) => {
 
-  const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/audio/all-audios`, {
+  const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/all-audios`, {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${token}`
@@ -14,7 +14,7 @@ export const getAllAudios = async (token: string) => {
 
 export const getAudios = async (userId: string, token: string) => {
 
-  const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/audio/my-audios/userId/${userId}`, {
+  const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/my-audios/userId/${userId}`, {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${token}`
@@ -27,7 +27,7 @@ export const getAudios = async (userId: string, token: string) => {
 
 export const getAudio = async (audioId: string, token: string) => {
 
-  return await fetch(`${import.meta.env.VITE_APP_API_URL}/api/audio/${audioId}`, {
+  return await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}`, {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${token}`
@@ -38,7 +38,7 @@ export const getAudio = async (audioId: string, token: string) => {
 
 export const uploadAndAnalyzeAudio = async (data: FormData, token: string, apikey: string) => {
 
-  const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/audio/uploadAndAnalyzeAudio`, {
+  const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/uploadAndAnalyzeAudio`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -53,7 +53,7 @@ export const uploadAndAnalyzeAudio = async (data: FormData, token: string, apike
 
 export const uploadAudio = async (data: FormData, token: string) => {
 
-  const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/audio/uploadAudio`, {
+  const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/uploadAudio`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`
@@ -67,7 +67,7 @@ export const uploadAudio = async (data: FormData, token: string) => {
 
 export const deleteAudio = async (audioId: string, token: string) => {
 
-  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/api/audio/${audioId}`, {
+  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}`, {
     method: "DELETE",
     headers: {
       "Authorization": `Bearer ${token}`

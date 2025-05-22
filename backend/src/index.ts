@@ -27,7 +27,7 @@ app.use(cors({
 }))
 
 // Routes
-app.use("/api/audio", audiosRouter);
+app.use("/", audiosRouter);
 
 app.use("/uploads", express.static(path.resolve("uploads")));
 
