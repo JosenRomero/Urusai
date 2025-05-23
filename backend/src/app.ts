@@ -34,7 +34,4 @@ app.use("/uploads", express.static(path.resolve("uploads")));
 app.use(notFound);
 app.use(handleErrors);
 
-// Starting the server
-app.listen(app.get("port"), () => {
-  console.log(`Server on port ${app.get("port")}`)
-});
+export default app
