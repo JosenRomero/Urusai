@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }: Props) => {
 
   if (!isLoaded) return <div className="loader mx-auto"></div>
 
-  if (!isSignedIn) return <Navigate to={"/sign-in"} />
+  if (!isSignedIn) return <Navigate to={"/"} />
 
   return children
 

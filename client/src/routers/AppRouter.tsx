@@ -5,6 +5,7 @@ import NotFoundPage from '../pages/NotFoundPage';
 import LearningPage from '../pages/LearningPage';
 import ProtectedRoute from './ProtectedRoute';
 import AllAudiosPage from '../pages/AllAudiosPage';
+import PresentationPage from '../pages/PresentationPage';
 
 const AppRouter = () => {
   return (
@@ -12,8 +13,9 @@ const AppRouter = () => {
       <Layout>
         <Routes>
           <Route path='/'>
+            <Route index element={<PresentationPage />} />
             <Route
-              index
+              path='home'
               element={
                 <ProtectedRoute>
                   <HomePage />
