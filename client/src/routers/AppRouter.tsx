@@ -3,7 +3,6 @@ import Layout from '../components/Layout';
 import HomePage from '../pages/HomePage';
 import NotFoundPage from '../pages/NotFoundPage';
 import LearningPage from '../pages/LearningPage';
-import SignInPage from '../pages/SignInPage';
 import ProtectedRoute from './ProtectedRoute';
 import AllAudiosPage from '../pages/AllAudiosPage';
 
@@ -37,7 +36,6 @@ const AppRouter = () => {
                 </ProtectedRoute>
               }
             />
-            <Route path='sign-in' element={<SignInPage />} />
             <Route path='*' element={<NotFoundPage />} />
           </Route>
         </Routes>
