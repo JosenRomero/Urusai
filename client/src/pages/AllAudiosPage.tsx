@@ -48,7 +48,7 @@ const AllAudiosPage = () => {
   }, [getToken]);
 
   return (
-    <div className="flex flex-col gap-16">
+    <div className="sm:w-96 md:w-2xl mx-auto flex flex-col gap-16">
       <ShowAudios
         title="Latest audios added"
         audios={audios}

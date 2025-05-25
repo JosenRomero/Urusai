@@ -119,7 +119,7 @@ const HomePage = () => {
   const updateIsRecordAudio = (isRecordAudio: boolean) => setIsRecordAudio(isRecordAudio);
 
   return (
-    <div className='flex flex-col gap-16'>
+    <div className='sm:w-96 md:w-2xl mx-auto flex flex-col gap-16'>
       <AudioUploadForm
         handleSubmit={handleSubmit}
         handleAudio={handleAudio}
