@@ -6,6 +6,7 @@ import LearningPage from '../pages/LearningPage';
 import ProtectedRoute from './ProtectedRoute';
 import AllAudiosPage from '../pages/AllAudiosPage';
 import PresentationPage from '../pages/PresentationPage';
+import PublicRoute from './PublicRoute';
 
 const AppRouter = () => {
   return (
@@ -13,7 +14,14 @@ const AppRouter = () => {
       <Layout>
         <Routes>
           <Route path='/'>
-            <Route index element={<PresentationPage />} />
+            <Route 
+              index 
+              element={
+                <PublicRoute>
+                  <PresentationPage />
+                </PublicRoute>
+              }
+            />
             <Route
               path='home'
               element={
