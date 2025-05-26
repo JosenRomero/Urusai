@@ -5,7 +5,7 @@ import path from 'path';
 // multer wil save the audio in the uploads folder
 const storage = multer.diskStorage({
 
-  destination: 'uploads',
+  destination: '/tmp',
 
   filename: (req, file, callback) => {
     let fileName = uuid() + path.extname(file.originalname);
