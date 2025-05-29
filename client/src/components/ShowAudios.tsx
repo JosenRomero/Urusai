@@ -7,6 +7,9 @@ import { NotificationMessage } from '../types/NotificationMessage';
 import { notificationMessageDefault } from '../consts/notificationMessageDefault';
 import Notification from './Notification';
 import Trash from '../icons/Trash';
+import UserIcon from '../icons/UserIcon';
+import HeartIcon from '../icons/HeartIcon';
+import BookMarkIcon from '../icons/BookMarkIcon';
 
 interface Props {
   title: string,
@@ -112,40 +115,56 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios }: Props) =
         ) : (
           <>
             { audios && audios.length > 0 ? (
-              <table className="w-full text-xl text-left rtl:text-right text-slate-800">
-                <tbody>
-                  {audios.map((audio) => {
-                    return (
-                      <tr
-                        className="border-b border-gray-200"
-                        key={audio._id}
-                      >
-                        <td 
-                          className="px-6 py-4 hover:cursor-pointer hover:bg-sky-100"
+              <>
+                {audios.map((audio) => {
+                  return (
+                    <div
+                      className="border-b border-gray-200 w-full flex items-center gap-5 py-4"
+                      key={audio._id}
+                    >
+
+                      <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
+                        <UserIcon />
+                      </div>
+
+                      <div className="flex flex-col flex-1">
+                        <p className="text-xl font-medium text-gray-900">{audio.title}</p>
+                        <p className="text-sm text-gray-500">{getAudioDate(audio.createdAt)}</p>
+                      </div>
+
+                      <div className="flex flex-row items-center gap-x-10">
+
+                        <div className="w-5 h-5 hover:cursor-pointer hover:text-yellow-600">
+                          <BookMarkIcon />
+                        </div>
+
+                        <div className="w-5 h-5 hover:cursor-pointer hover:text-green-600">
+                          <HeartIcon />
+                        </div>
+
+                        { IsMyList && (
+                          <button 
+                            type="button" 
+                            className="text-slate-800 hover:text-red-700 hover:cursor-pointer w-5 h-5"
+                            onClick={ () => removeAudio(audio.audioId) }
+                          >
+                            <Trash />
+                          </button>
+                        )}
+
+                        <div
+                          className="w-5 h-5 inline-block hover:cursor-pointer hover:scale-125 transition"
                           onClick={() => playAudio(audio.audioId, audio.title)}
                         >
                           <PlayIcon />
-                        </td>
-                        <td className="px-6 py-4">{audio.title}</td>
-                        <td className="px-6 py-4">{getAudioDate(audio.createdAt)}</td>
+                        </div>
 
-                        { IsMyList && (
-                          <td className="px-6 py-4">
-                            <button 
-                              type="button" 
-                              className="text-slate-800 hover:text-red-700 hover:cursor-pointer"
-                              onClick={ () => removeAudio(audio.audioId) }
-                            >
-                              <Trash />
-                            </button>
-                          </td>
-                        )}
+                      </div>
 
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+                    </div>
+                  )
+                })}
+              </>
             ) : (
               <p className="w-full text-center mt-10">No saved audio files.</p>
             )}
