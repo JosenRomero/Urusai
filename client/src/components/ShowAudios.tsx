@@ -119,17 +119,19 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios }: Props) =
                 {audios.map((audio) => {
                   return (
                     <div
-                      className="border-b border-gray-200 w-full flex items-center gap-5 py-4"
+                      className="border-b border-gray-200 w-full flex flex-col sm:flex-row sm:items-center gap-5 py-4"
                       key={audio._id}
                     >
+                      
+                      <div className="flex flex-row flex-1 items-center gap-5">
+                        <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
+                          <UserIcon />
+                        </div>
 
-                      <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
-                        <UserIcon />
-                      </div>
-
-                      <div className="flex flex-col flex-1">
-                        <p className="text-xl font-medium text-gray-900">{audio.title}</p>
-                        <p className="text-sm text-gray-500">{getAudioDate(audio.createdAt)}</p>
+                        <div className="flex flex-col flex-1">
+                          <p className="text-xl font-medium text-gray-900">{audio.title}</p>
+                          <p className="text-sm text-gray-500">{getAudioDate(audio.createdAt)}</p>
+                        </div>
                       </div>
 
                       <div className="flex flex-row items-center gap-x-10">
