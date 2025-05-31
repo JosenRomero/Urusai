@@ -1,123 +1,36 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useAuth } from '@clerk/clerk-react';
-import { uploadAudio, getAudios } from '../services/audioService';
-import { Audio } from '../types/Audio';
 import ShowAudios from '../components/ShowAudios';
 import Notification from '../components/Notification';
 import { notificationMessageDefault } from '../consts/notificationMessageDefault';
-import { NotificationMessage } from '../types/NotificationMessage';
 import AudioUploadForm from '../components/AudioUploadForm';
+import { useState } from 'react';
+import useGetAudios from '../hooks/useGetAudios';
+import { NotificationMessage } from '../types/NotificationMessage';
+import useUploadAudio from '../hooks/useUploadAudio';
 
 const HomePage = () => {
-  const { getToken, userId } = useAuth();
-  const [audioTitle, setAudioTitle] = useState<string | null>(null);
-  const [file, setFile] = useState<File | null>(null);
-  const [myAudios, setMyAudios] = useState<Audio[]>([]);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
   const [isRecordAudio, setIsRecordAudio] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
   const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
 
-  const myAllAudios = useCallback( async () => {
+  const updateNotification = (message: NotificationMessage) => setNotificationMessage(message);
 
-    try {
-      const token = await getToken()
-      if (!token || !userId) throw new Error("Missing required fields");
-      const { audios, message } = await getAudios(userId, token);
-
-      setIsLoaded(true);
-
-      if (message) throw new Error(message);
-
-      setMyAudios(audios);
-
-    } catch (error) {
-      let msg = "Something went wrong."
-
-      if (error instanceof Error) msg = error.message
-
-      setNotificationMessage({
-        text: msg,
-        isError: true,
-      });
-    }
-
-  }, [getToken, userId]);
-
-  useEffect(() => {
-
-    myAllAudios();
-    
-  }, [myAllAudios]);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    
-    try {
-      e.preventDefault();
-
-      if (audioTitle && file) {
-
-        const formData = new FormData();
-        formData.append("title", audioTitle);
-        formData.append("audio", file);
-
-        const token = await getToken();
-
-        if (!token) throw new Error("Token is required");
-
-        const { successMessage, message } = await uploadAudio(formData, token);
-
-        if (message) throw new Error(message);
-
-        setNotificationMessage({
-          text: successMessage,
-          isError: false
-        });
-
-        // reset form
-        if (formRef.current) formRef.current.reset();
-        if (audioRef.current) audioRef.current.remove();
-        
-        myAllAudios();
-
-      } else {
-        throw new Error("Missing required fields");
-      }
-
-    } catch (error) {
-
-      let msg = "Something went wrong."
-
-      if (error instanceof Error) msg = error.message
-      
-      setNotificationMessage({
-        text: msg,
-        isError: true
-      });
-
-    }
-    
-  }
-
-  const handleAudio = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || !e.target.files[0]) return
-    const audio = e.target.files[0];
-    setFile(audio)
-  }
-
-  const handleRecordAudio = (audioBlob: Blob) => {
-    const myFile = new File([audioBlob], "audio-recording.wav", {
-      type: "audio/wav",
-      lastModified: Date.now()
-    });
-    setFile(myFile);
-  }
-
-  const updateAudioTitle = (title: string) => setAudioTitle(title);
+  const {
+    myAudios,
+    isLoaded,
+    myAllAudios
+  } = useGetAudios({ updateNotification });
+  
+  const {
+    formRef,
+    audioRef,
+    handleSubmit,
+    handleAudio,
+    handleRecordAudio,
+    updateAudioTitle,
+  } = useUploadAudio({ myAllAudios, updateNotification });
 
   const updateIsRecordAudio = (isRecordAudio: boolean) => setIsRecordAudio(isRecordAudio);
-
+  
   return (
     <div className='md:w-2xl mx-auto flex flex-col gap-y-16 p-4'>
       <AudioUploadForm
@@ -146,7 +59,7 @@ const HomePage = () => {
 
       <Notification
         message={notificationMessage}
-        notificationClose={ () => setNotificationMessage(notificationMessageDefault) }
+        notificationClose={ () => updateNotification(notificationMessageDefault) }
       />
     </div>
   )
