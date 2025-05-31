@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { getAuth } from '@clerk/express';
+import { getAuth, clerkClient } from '@clerk/express';
 import { analyzeAudio } from "../services/aiService";
 import { pipeline } from "stream/promises";
 import fs from 'fs'; // file system
@@ -119,10 +119,13 @@ class AudiosController {
 
       await pipeline(audioStream, uploadStream);
 
+      const { imageUrl } = await clerkClient.users.getUser(userId);
+      
       const newAudio = new Audio({
         userId,
         title,
         audioId: uploadStream.id,
+        imageUrl,
         mimeType: audio.mimetype
       });
 
