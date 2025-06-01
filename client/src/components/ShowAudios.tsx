@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '@clerk/clerk-react';
 import { Audio } from "../types/Audio";
-import { getAudio, deleteAudio } from "../services/audioService";
 import PlayIcon from '../icons/PlayIcon';
 import { NotificationMessage } from '../types/NotificationMessage';
 import { notificationMessageDefault } from '../consts/notificationMessageDefault';
@@ -10,6 +8,8 @@ import Trash from '../icons/Trash';
 import UserIcon from '../icons/UserIcon';
 import HeartIcon from '../icons/HeartIcon';
 import BookMarkIcon from '../icons/BookMarkIcon';
+import usePlayer from '../hooks/usePlayer';
+import { getAudioDate } from '../utils';
 
 interface Props {
   title: string,
@@ -20,90 +20,11 @@ interface Props {
 }
 
 const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios }: Props) => {
-  const { getToken } = useAuth();
   const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
 
-  const getAudioDate = (date: string) => {
+  const updateNotification = (message: NotificationMessage) => setNotificationMessage(message);
 
-    return new Date(date).toLocaleString("en", { 
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    })
-    
-  }
-
-  const playAudio = async (audioId: string, title: string) => {
-
-    try {
-
-      const token = await getToken();
-      if (!token) throw new Error("Missing required fields");
-      const response = await getAudio(audioId, token);
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.message);
-      }
-
-      const audioBlob = await response.blob();
-      const url = URL.createObjectURL(audioBlob);
-      
-      const audioPlayerContainer = document.getElementById("audioPlayerContainer") as HTMLDivElement
-      const audioPlayer = document.getElementById("audioPlayer") as HTMLAudioElement
-      const audioTitle = document.getElementById("audioTitle") as HTMLParagraphElement 
-
-      if (audioPlayerContainer.classList.contains("hidden")) {
-        audioPlayerContainer.classList.remove("hidden");
-      }
-
-      audioPlayer.src = url
-      audioTitle.innerHTML = title
-      
-    } catch (error) {
-      let msg = "Something went wrong."
-
-      if (error instanceof Error) msg = error.message
-        
-      setNotificationMessage({
-        text: msg,
-        isError: true
-      });
-    }
-
-  }
-
-  const removeAudio = async (audioId: string) => {
-
-    try {
-
-      const token = await getToken();
-      if (!token) throw new Error("Token is required");
-
-      const { successMessage, message } = await deleteAudio(audioId, token);
-
-      if (message) throw new Error(message);
-
-      setNotificationMessage({
-        text: successMessage,
-        isError: false
-      });
-
-      myAllAudios(); // refresh audios list
-      
-    } catch (error) {
-      let msg = "Something went wrong."
-
-      if (error instanceof Error) msg = error.message
-        
-      setNotificationMessage({
-        text: msg,
-        isError: true
-      });
-
-    }
-
-  }
+  const { playAudio, removeAudio } = usePlayer({ updateNotification, myAllAudios });
 
   return (
     <div>
