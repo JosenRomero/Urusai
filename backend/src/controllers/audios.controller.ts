@@ -5,6 +5,7 @@ import { pipeline } from "stream/promises";
 import fs from 'fs'; // file system
 import { bucket } from "../database/database";
 import { Audio } from "../models/audioModel";
+import { Like } from "../models/likeModel";
 import mongoose from "mongoose";
 
 class AudiosController {
@@ -210,6 +211,37 @@ class AudiosController {
       mongooseTransaction.endSession();
     }
 
+  }
+
+  async addLike(req: Request, res: Response, next: NextFunction) {
+    
+    try {
+      const { userId } = getAuth(req);
+      const audioId = req.params.audioId;
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+      if (!audioId) throw { message: "AudioId is required", status: 400 }
+
+      const file = await Audio.findOne({ audioId });
+
+      if (!file) throw { message: "Audio not found", status: 404 }
+
+      const like = await Like.findOne({ userId, audioId });
+
+      if (like) throw { message: "You've already liked this audio", status: 400 }
+
+      const newLike = new Like({
+        userId,
+        audioId
+      });
+
+      await newLike.save();
+
+      res.status(201).json({ successMessage: "Like saved" });
+
+    } catch (error) {
+      next(error);
+    }
   }
 
 }

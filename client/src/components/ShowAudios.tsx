@@ -24,7 +24,7 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios }: Props) =
 
   const updateNotification = (message: NotificationMessage) => setNotificationMessage(message);
 
-  const { playAudio, removeAudio } = usePlayer({ updateNotification, myAllAudios });
+  const { playAudio, removeAudio, like } = usePlayer({ updateNotification, myAllAudios });
 
   return (
     <div>
@@ -61,9 +61,13 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios }: Props) =
                           <BookMarkIcon />
                         </div>
 
-                        <div className="w-5 h-5 hover:cursor-pointer hover:text-green-600">
+                        <button
+                          type="button"
+                          className="w-5 h-5 hover:cursor-pointer hover:text-green-600"
+                          onClick={ () => like(audio.audioId) }
+                        >
                           <HeartIcon />
-                        </div>
+                        </button>
 
                         { IsMyList && (
                           <button 

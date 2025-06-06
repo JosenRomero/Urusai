@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { NotificationMessage } from "../types/NotificationMessage";
-import { deleteAudio, getAudio } from "../services/audioService";
+import { addLike, deleteAudio, getAudio } from "../services/audioService";
 
 interface Props {
   updateNotification(message: NotificationMessage): void
@@ -79,9 +79,33 @@ const usePlayer = ({ updateNotification, myAllAudios }: Props) => {
 
   }
 
+  const like = async (audioId: string) => {
+
+     try {
+      const token = await getToken();
+      if (!token) throw new Error("Token is required")
+
+      const { message } = await addLike(audioId, token);
+
+      if (message) throw new Error(message)
+
+     } catch (error) {
+      let msg = "Something went wrong."
+
+      if (error instanceof Error) msg = error.message
+
+      updateNotification({
+        text: msg,
+        isError: true,
+      })
+    }
+
+  }
+
   return {
     playAudio,
-    removeAudio
+    removeAudio,
+    like
   }
 }
 
