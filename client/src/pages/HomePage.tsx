@@ -17,7 +17,8 @@ const HomePage = () => {
   const {
     myAudios,
     isLoaded,
-    myAllAudios
+    myAllAudios,
+    updateMyAudios
   } = useGetAudios({ updateNotification });
   
   const {
@@ -49,6 +50,7 @@ const HomePage = () => {
         isLoaded={isLoaded}
         IsMyList={true}
         myAllAudios={myAllAudios}
+        updateMyAudios={updateMyAudios}
       />
 
       { myAudios && myAudios.length > 0 && (

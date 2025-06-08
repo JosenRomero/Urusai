@@ -10,21 +10,34 @@ import HeartIcon from '../icons/HeartIcon';
 import BookMarkIcon from '../icons/BookMarkIcon';
 import usePlayer from '../hooks/usePlayer';
 import { getAudioDate } from '../utils';
+import HeartFilledIcon from '../icons/HeartFilledIcon';
 
 interface Props {
-  title: string,
-  audios: Audio[],
+  title: string
+  audios: Audio[]
   isLoaded: boolean
   IsMyList: boolean
   myAllAudios(): void
+  updateMyAudios(audios: Audio[]): void
 }
 
-const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios }: Props) => {
+const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAudios }: Props) => {
   const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
 
   const updateNotification = (message: NotificationMessage) => setNotificationMessage(message);
 
   const { playAudio, removeAudio, like } = usePlayer({ updateNotification, myAllAudios });
+
+  const addLike = (audioId: string) => {
+
+    like(audioId)
+
+    const currentIndex = audios.findIndex(audio => audio.audioId === audioId)
+    const currentAudios = [...audios];
+    currentAudios[currentIndex].like = true;
+    updateMyAudios(currentAudios);
+
+  }
 
   return (
     <div>
@@ -63,10 +76,10 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios }: Props) =
 
                         <button
                           type="button"
-                          className="w-5 h-5 hover:cursor-pointer hover:text-green-600"
-                          onClick={ () => like(audio.audioId) }
+                          className={`w-5 h-5 hover:cursor-pointer ${audio.like ? "text-red-600" : "hover:text-red-600"} `}
+                          onClick={ () => addLike(audio.audioId) }
                         >
-                          <HeartIcon />
+                          { audio.like ? <HeartFilledIcon /> : <HeartIcon /> }
                         </button>
 
                         { IsMyList && (

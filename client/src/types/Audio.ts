@@ -3,5 +3,6 @@ export interface Audio {
   title: string
   audioId: string
   mimeType: string
+  like: boolean | undefined
   createdAt: string
 }

@@ -38,18 +38,23 @@ const useGetAudios = ({ updateNotification }: Props) => {
   
       }
   
-    }, [getToken, userId, updateNotification]);
+  }, [getToken, userId, updateNotification]);
   
-    useEffect(() => {
+  useEffect(() => {
   
-      myAllAudios();
+    myAllAudios();
   
-    }, [myAllAudios]);
+  }, []);
+
+  const updateMyAudios = (audios: Audio[]) => {
+    setMyAudios(audios)
+  }
 
   return {
     myAudios,
     isLoaded,
-    myAllAudios
+    myAllAudios,
+    updateMyAudios
   }
 
 }

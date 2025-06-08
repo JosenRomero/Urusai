@@ -47,6 +47,10 @@ const AllAudiosPage = () => {
 
   }, [getToken]);
 
+  const updateAudios = (audios: Audio[]) => {
+    setAudios(audios);
+  }
+
   return (
     <div className="sm:w-96 md:w-2xl mx-auto flex flex-col gap-y-16 p-4">
       <ShowAudios
@@ -55,6 +59,7 @@ const AllAudiosPage = () => {
         isLoaded={isLoaded}
         IsMyList={false}
         myAllAudios={() => console.log("")}
+        updateMyAudios={ updateAudios }
       />
       <Notification
         message={notificationMessage}
