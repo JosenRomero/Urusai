@@ -15,36 +15,40 @@ const useGetAudios = ({ updateNotification }: Props) => {
 
   const myAllAudios = useCallback( async () => {
   
-      try {
-        const token = await getToken();
-        if (!token || !userId) throw new Error("Missing required fields");
-        const { audios, message } = await getAudios(userId, token);
+    try {
+      const token = await getToken();
+      if (!token || !userId) throw new Error("Missing required fields");
+      const { audios, message } = await getAudios(userId, token);
   
-        setIsLoaded(true);
+      setIsLoaded(true);
   
-        if (message) throw new Error(message);
+      if (message) throw new Error(message);
   
-        setMyAudios(audios);
+      setMyAudios(audios);
         
-      } catch (error) {
-        let msg = "Something went wrong."
+    } catch (error) {
+      let msg = "Something went wrong."
   
-        if (error instanceof Error) msg = error.message
+      if (error instanceof Error) msg = error.message
   
-        updateNotification({
-          text: msg,
-          isError: true,
-        });
+      updateNotification({
+        text: msg,
+        isError: true,
+      });
+
+      setIsLoaded(true);
   
-      }
+    }
   
   }, [getToken, userId, updateNotification]);
   
   useEffect(() => {
-  
-    myAllAudios();
-  
-  }, []);
+
+    if (!isLoaded) {
+      myAllAudios();
+    }
+    
+  }, [isLoaded, myAllAudios]);
 
   const updateMyAudios = (audios: Audio[]) => {
     setMyAudios(audios)
