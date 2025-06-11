@@ -50,6 +50,21 @@ class AudiosController {
           $match: {
             userId: req.params.userId
           }
+        },
+        {
+          $lookup: {
+            from: "likes",
+            localField: "audioId", // Audio.audioId
+            foreignField: "audioId", // Like.audioId
+            as: "likes"
+          }
+        },
+        {
+          $addFields: {
+            userLike: {
+              $in: [req.params.userId, "$likes.userId"] // true if the user gave a like
+            }
+          }
         }
       ]);
 

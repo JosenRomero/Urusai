@@ -8,6 +8,7 @@ const LikeSchema = new Schema(
     },
     audioId: {
       type: String,
+      ref: "Audio",
       required: [true, "Audio is required"]
     }
   },

@@ -34,7 +34,8 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAu
 
     const currentIndex = audios.findIndex(audio => audio.audioId === audioId)
     const currentAudios = [...audios];
-    currentAudios[currentIndex].like = true;
+
+    currentAudios[currentIndex].userLike = true;
     updateMyAudios(currentAudios);
 
   }
@@ -76,10 +77,10 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAu
 
                         <button
                           type="button"
-                          className={`w-5 h-5 hover:cursor-pointer ${audio.like ? "text-red-600" : "hover:text-red-600"} `}
+                          className={`w-5 h-5 hover:cursor-pointer ${audio.userLike ? "text-red-600" : "hover:text-red-600"} `}
                           onClick={ () => addLike(audio.audioId) }
                         >
-                          { audio.like ? <HeartFilledIcon /> : <HeartIcon /> }
+                          { audio.userLike ? <HeartFilledIcon /> : <HeartIcon /> }
                         </button>
 
                         { IsMyList && (
