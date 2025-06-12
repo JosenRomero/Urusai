@@ -259,6 +259,32 @@ class AudiosController {
     }
   }
 
+  async removeLike(req: Request, res: Response, next: NextFunction) {
+    
+    try {
+      const { userId } = getAuth(req);
+      const audioId = req.params.audioId;
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+      if (!audioId) throw { message: "AudioId is required", status: 400 }
+
+      const file = await Audio.findOne({ audioId });
+
+      if (!file) throw { message: "Audio not found", status: 404 }
+
+      const like = await Like.findOne({ userId, audioId });
+
+      if (!like) throw { message: "Like not found", status: 400 }
+
+      await Like.findOneAndDelete({ userId, audioId });
+
+      res.status(200).json({ successMessage: "Like deleted" });
+
+    } catch (error) {
+      next(error);
+    }
+  }
+
 }
 
 const audiosController = new AudiosController();

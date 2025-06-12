@@ -26,16 +26,19 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAu
 
   const updateNotification = (message: NotificationMessage) => setNotificationMessage(message);
 
-  const { playAudio, removeAudio, like } = usePlayer({ updateNotification, myAllAudios });
+  const { playAudio, removeAudio, like, dislike } = usePlayer({ updateNotification, myAllAudios });
 
-  const addLike = (audioId: string) => {
+  const btnLike = (audioId: string, currentValue: boolean, index: number) => {
 
-    like(audioId)
-
-    const currentIndex = audios.findIndex(audio => audio.audioId === audioId)
     const currentAudios = [...audios];
 
-    currentAudios[currentIndex].userLike = true;
+    if (!currentValue) {
+      like(audioId);
+    } else {
+      dislike(audioId);
+    }
+  
+    currentAudios[index].userLike = !currentValue;
     updateMyAudios(currentAudios);
 
   }
@@ -51,7 +54,7 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAu
           <>
             { audios && audios.length > 0 ? (
               <>
-                {audios.map((audio) => {
+                {audios.map((audio, index) => {
                   return (
                     <div
                       className="border-b border-gray-200 w-full flex flex-col sm:flex-row sm:items-center gap-5 py-4"
@@ -78,7 +81,7 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAu
                         <button
                           type="button"
                           className={`w-5 h-5 hover:cursor-pointer ${audio.userLike ? "text-red-600" : "hover:text-red-600"} `}
-                          onClick={ () => addLike(audio.audioId) }
+                          onClick={ () => btnLike(audio.audioId, audio.userLike, index) }
                         >
                           { audio.userLike ? <HeartFilledIcon /> : <HeartIcon /> }
                         </button>

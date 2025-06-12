@@ -90,3 +90,16 @@ export const addLike = async (audioId: string, token: string) => {
   return await response.json();
   
 }
+
+export const removeLike = async (audioId: string, token: string) => {
+
+  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}/dislike`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+
+  return await response.json();
+  
+}
