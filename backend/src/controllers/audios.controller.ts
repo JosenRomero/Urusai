@@ -21,12 +21,31 @@ class AudiosController {
 
     try {
 
+      const { userId } = getAuth(req);
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+
       const allAudios = await Audio.aggregate([
         { 
           $sort: { 
             createdAt: -1 
           } 
-        }, 
+        },
+        {
+          $lookup: {
+            from: "likes",
+            localField: "audioId", // Audio.audioId
+            foreignField: "audioId", // Like.audioId
+            as: "likes"
+          }
+        },
+        {
+          $addFields: {
+            userLike: {
+              $in: [userId, "$likes.userId"] // true if the user gave a like
+            }
+          }
+        },
         {
           $limit: 10
         }
