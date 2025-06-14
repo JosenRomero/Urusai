@@ -1,3 +1,4 @@
+import { Favorite } from "./Favorite"
 import { Like } from "./Like"
 
 export interface Audio {
@@ -9,4 +10,6 @@ export interface Audio {
   createdAt: string
   likes: Like[]
   userLike: boolean
+  favorites: Favorite[]
+  userFavorite: boolean
 }
