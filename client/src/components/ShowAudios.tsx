@@ -11,6 +11,7 @@ import BookMarkIcon from '../icons/BookMarkIcon';
 import usePlayer from '../hooks/usePlayer';
 import { getAudioDate } from '../utils';
 import HeartFilledIcon from '../icons/HeartFilledIcon';
+import BookMarkFilledIcon from '../icons/BookMarkFilledIcon';
 
 interface Props {
   title: string
@@ -26,19 +27,28 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAu
 
   const updateNotification = (message: NotificationMessage) => setNotificationMessage(message);
 
-  const { playAudio, removeAudio, like, dislike } = usePlayer({ updateNotification, myAllAudios });
+  const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer({ updateNotification, myAllAudios });
 
   const btnLike = (audioId: string, currentValue: boolean, index: number) => {
 
     const currentAudios = [...audios];
 
-    if (!currentValue) {
-      like(audioId);
-    } else {
-      dislike(audioId);
-    }
+    if (!currentValue) like(audioId);
+    else dislike(audioId);
   
     currentAudios[index].userLike = !currentValue;
+    updateMyAudios(currentAudios);
+
+  }
+
+  const btnFavorite = (audioId: string, currentValue: boolean, index: number) => {
+
+    const currentAudios = [...audios];
+
+    if (!currentValue) favorite(audioId);
+    else removeFav(audioId);
+
+    currentAudios[index].userFavorite = !currentValue;
     updateMyAudios(currentAudios);
 
   }
@@ -74,9 +84,13 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAu
 
                       <div className="flex flex-row items-center gap-x-10">
 
-                        <div className="w-5 h-5 hover:cursor-pointer hover:text-yellow-600">
-                          <BookMarkIcon />
-                        </div>
+                        <button
+                          type="button"
+                          className={`w-5 h-5 hover:cursor-pointer ${audio.userFavorite ? "text-yellow-400" : "hover:text-yellow-400"} `}
+                          onClick={ () => btnFavorite(audio.audioId, audio.userFavorite, index) }
+                        >
+                          { audio.userFavorite ? <BookMarkFilledIcon /> : <BookMarkIcon /> }
+                        </button>
 
                         <button
                           type="button"

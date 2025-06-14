@@ -7,6 +7,7 @@ import { bucket } from "../database/database";
 import { Audio } from "../models/audioModel";
 import { Like } from "../models/likeModel";
 import mongoose from "mongoose";
+import { Favorite } from "../models/favoriteModel";
 
 class AudiosController {
 
@@ -40,9 +41,20 @@ class AudiosController {
           }
         },
         {
+          $lookup: {
+            from: "favorites",
+            localField: "audioId", // Audio.audioId
+            foreignField: "audioId", // Favorite.audioId
+            as: "favorites"
+          }
+        },
+        {
           $addFields: {
             userLike: {
               $in: [userId, "$likes.userId"] // true if the user gave a like
+            },
+            userFavorite: {
+              $in: [userId, "$favorites.userId"] // true if the user gave a favorite
             }
           }
         },
@@ -79,9 +91,20 @@ class AudiosController {
           }
         },
         {
+          $lookup: {
+            from: "favorites",
+            localField: "audioId", // Audio.audioId
+            foreignField: "audioId", // Favorite.audioId
+            as: "favorites"
+          }
+        },
+        {
           $addFields: {
             userLike: {
               $in: [req.params.userId, "$likes.userId"] // true if the user gave a like
+            },
+            userFavorite: {
+              $in: [req.params.userId, "$favorites.userId"] // true if the user gave a favorite
             }
           }
         }
@@ -302,6 +325,65 @@ class AudiosController {
     } catch (error) {
       next(error);
     }
+  }
+
+  async addFavorite(req: Request, res: Response, next: NextFunction) {
+
+    try {
+      const { userId } = getAuth(req);
+      const audioId = req.params.audioId;
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+      if (!audioId) throw { message: "AudioId is required", status: 400 }
+
+      const file = await Audio.findOne({ audioId });
+
+      if (!file) throw { message: "Audio not found", status: 404 }
+
+      const favorite = await Favorite.findOne({ userId, audioId });
+
+      if (favorite) throw { message: "You've already favorited this audio", status: 400 }
+
+      const newFavorite = new Favorite({
+        userId,
+        audioId
+      });
+
+      await newFavorite.save();
+
+      res.status(201).json({ successMessage: "Favorite saved" });
+      
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
+  async removeFavorite(req: Request, res: Response, next: NextFunction) {
+
+    try {
+      const { userId } = getAuth(req);
+      const audioId = req.params.audioId;
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+      if (!audioId) throw { message: "AudioId is required", status: 400 }
+
+      const file = await Audio.findOne({ audioId });
+
+      if (!file) throw { message: "Audio not found", status: 404 }
+
+      const favorite = await Favorite.findOne({ userId, audioId });
+
+      if (!favorite) throw { message: "Favorite not found", status: 400 }
+
+      await Favorite.findOneAndDelete({ userId, audioId });
+
+      res.status(200).json({ successMessage: "Favorite deleted" });
+      
+    } catch (error) {
+      next(error);
+    }
+
   }
 
 }

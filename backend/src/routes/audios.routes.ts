@@ -26,4 +26,8 @@ router.post("/:audioId/like", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN
 
 router.delete("/:audioId/dislike", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.removeLike);
 
+router.post("/:audioId/favorite", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.addFavorite);
+
+router.delete("/:audioId/removeFav", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.removeFavorite);
+
 export default router;
