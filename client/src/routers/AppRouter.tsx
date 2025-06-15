@@ -5,6 +5,7 @@ import NotFoundPage from '../pages/NotFoundPage';
 import LearningPage from '../pages/LearningPage';
 import ProtectedRoute from './ProtectedRoute';
 import AllAudiosPage from '../pages/AllAudiosPage';
+import FavoriteAudiosPage from '../pages/FavoriteAudiosPage';
 import PresentationPage from '../pages/PresentationPage';
 import PublicRoute from './PublicRoute';
 
@@ -43,6 +44,14 @@ const AppRouter = () => {
               element={
                 <ProtectedRoute>
                   <AllAudiosPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path='favorite-audios' 
+              element={
+                <ProtectedRoute>
+                  <FavoriteAudiosPage />
                 </ProtectedRoute>
               }
             />

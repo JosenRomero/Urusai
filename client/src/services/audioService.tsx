@@ -129,3 +129,16 @@ export const removeFavorite = async (audioId: string, token: string) => {
   return await response.json();
   
 }
+
+export const getFavoriteAudios = async (token: string) => {
+
+  const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/favorite-audios`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+
+  return await response.json();
+
+}

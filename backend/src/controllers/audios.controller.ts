@@ -17,7 +17,7 @@ class AudiosController {
     res.status(401).json({ message: "Unauthorized" });
   }
 
-  // get "api/audio/all-audios"
+  // get "all-audios"
   async getAllAudios(req: Request, res: Response, next: NextFunction) {
 
     try {
@@ -71,7 +71,80 @@ class AudiosController {
 
   }
 
-  // get "api/audio/my-audios/userId/:userId"
+  // get "favorite-Audios"
+  async getFavoriteAudios(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const { userId } = getAuth(req);
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+
+      const favorites = await Favorite.aggregate([
+        {
+          $match: {
+            userId: userId
+          }
+        },
+        {
+          $sort: {
+            createdAt: -1
+          }
+        },
+        {
+          $lookup: {
+            from: "likes",
+            localField: "audioId", // Favorite.audioId
+            foreignField: "audioId", // Like.audioId
+            as: "likes"
+          }
+        },
+        {
+          $addFields: {
+            userLike: {
+              $in: [userId, "$likes.userId"] // true if the user gave a like
+            },
+            userFavorite: true
+          }
+        },
+        {
+          $lookup: {
+            from: "audios",
+            localField: "audioId", // Favorite.audioId
+            foreignField: "audioId", // Audio.audioId
+            as: "audio"
+          }
+        },
+        {
+          /** 
+           * Result: { userId, audioId, title, imageUrl, likes, userLike, userFavorite, ... }
+           * Instead of { userId, audioId, audio: [ { title, imageUrl, ... } ], likes, userLike, userFavorite, ... }
+          */
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: [
+                { $arrayElemAt: ["$audio", 0] },
+                "$$ROOT",
+              ]
+            }
+          }
+        },
+        {
+          $project: { 
+            audio: 0 // Specifies the suppression of the 'audio' field
+          }
+        }
+      ]);
+
+      res.status(200).json({ favorites });
+      
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
+  // get "my-audios/userId/:userId"
   async getAudios(req: Request, res: Response, next: NextFunction) {
 
     try {
