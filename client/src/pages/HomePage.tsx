@@ -52,13 +52,6 @@ const HomePage = () => {
         myAllAudios={myAllAudios}
         updateMyAudios={updateMyAudios}
       />
-
-      { myAudios && myAudios.length > 0 && (
-          <div>
-            <a className="hover:!underline" href='all-audios'>Latest audios</a>
-          </div>
-      )}
-
       <Notification
         message={notificationMessage}
         notificationClose={ () => updateNotification(notificationMessageDefault) }
