@@ -4,7 +4,7 @@ import HeartIcon from "../icons/HeartIcon";
 import React, { useCallback } from 'react';
 import PlayListIcon from '../icons/PlayListIcon';
 import HomeIcon from '../icons/HomeIcon';
-import LeaningIcon from '../icons/LeaningIcon';
+import LearningIcon from '../icons/LearningIcon';
 
 interface Props {
   ref: React.Ref<HTMLDivElement>
@@ -40,7 +40,7 @@ const SecondaryMenu = ({ ref, closeSecondaryMenu }: Props) => {
               <span className="ms-3">Favorites</span>
             </NavLink>
             <NavLink to={"/learning"} className={"flex items-center p-2 !text-gray-900 rounded-lg hover:bg-gray-100 group"}>
-              <LeaningIcon />
+              <LearningIcon />
               <span className="ms-3">Learning</span>
             </NavLink>
           </ul>

@@ -1,4 +1,4 @@
-const LeaningIcon = () => {
+const LearningIcon = () => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -24,4 +24,4 @@ const LeaningIcon = () => {
   )
 }
 
-export default LeaningIcon
+export default LearningIcon
