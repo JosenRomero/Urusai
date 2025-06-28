@@ -23,12 +23,9 @@ const useGetFavoriteAudios = () => {
       setAudios(favorites);
 
     } catch (error) {
-      let msg = "Something went wrong."
-
-      if (error instanceof Error) msg = error.message
 
       console.log({
-        text: msg,
+        text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
       });
 

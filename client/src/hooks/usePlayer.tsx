@@ -35,12 +35,8 @@ const usePlayer = ({ myAllAudios }: Props) => {
       audioTitle.innerHTML = title
 
     } catch (error) {
-      let msg = "Something went wrong."
-
-      if (error instanceof Error) msg = error.message
-
       console.log({
-        text: msg,
+        text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
       })
     }
@@ -65,12 +61,8 @@ const usePlayer = ({ myAllAudios }: Props) => {
       myAllAudios(); // refresh audios list
 
     } catch (error) {
-      let msg = "Something went wrong."
-
-      if (error instanceof Error) msg = error.message
-
       console.log({
-        text: msg,
+        text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
       })
     }
@@ -88,12 +80,8 @@ const usePlayer = ({ myAllAudios }: Props) => {
       if (message) throw new Error(message)
 
     } catch (error) {
-      let msg = "Something went wrong."
-
-      if (error instanceof Error) msg = error.message
-
       console.log({
-        text: msg,
+        text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
       })
     }
@@ -111,12 +99,8 @@ const usePlayer = ({ myAllAudios }: Props) => {
       if (message) throw new Error(message)
       
     } catch (error) {
-      let msg = "Something went wrong."
-
-      if (error instanceof Error) msg = error.message
-
       console.log({
-        text: msg,
+        text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
       })
     }
@@ -133,12 +117,8 @@ const usePlayer = ({ myAllAudios }: Props) => {
       if (message) throw new Error(message)
 
     } catch (error) {
-      let msg = "Something went wrong."
-
-      if (error instanceof Error) msg = error.message
-
       console.log({
-        text: msg,
+        text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
       })
     }
@@ -156,12 +136,8 @@ const usePlayer = ({ myAllAudios }: Props) => {
       if (message) throw new Error(message)
       
     } catch (error) {
-      let msg = "Something went wrong."
-
-      if (error instanceof Error) msg = error.message
-
       console.log({
-        text: msg,
+        text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
       })
     }

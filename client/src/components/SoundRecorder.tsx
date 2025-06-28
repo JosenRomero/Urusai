@@ -43,13 +43,9 @@ const SoundRecorder = ({ handleRecordAudio, audioRef }: Props) => {
 
       setRecording(true);
 
-    } catch (error) {
-      let msg = "Error accessing the microphone."
-
-      if (error instanceof Error) msg = error.message
-        
+    } catch (error) { 
       console.log({
-        text: msg,
+        text: (error instanceof Error) ? error.message : "Error accessing the microphone.",
         isError: true
       });
     }
