@@ -1,17 +1,13 @@
 import { useAuth } from "@clerk/clerk-react"
 import { useEffect, useState } from "react";
 import { Audio } from "../types/Audio";
-import { NotificationMessage } from "../types/NotificationMessage";
-import { notificationMessageDefault } from "../consts/notificationMessageDefault";
 import { getAllAudios } from "../services/audioService";
-import Notification from "../components/Notification";
 import ShowAudios from "../components/ShowAudios";
 
 const AllAudiosPage = () => {
   const { getToken } = useAuth();
   const [audios, setAudios] = useState<Audio[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
   
   useEffect(() => {
 
@@ -35,7 +31,7 @@ const AllAudiosPage = () => {
 
         if (error instanceof Error) msg = error.message
 
-        setNotificationMessage({
+        console.log({
           text: msg,
           isError: true,
         }); 
@@ -60,10 +56,6 @@ const AllAudiosPage = () => {
         IsMyList={false}
         myAllAudios={() => console.log("")}
         updateMyAudios={ updateAudios }
-      />
-      <Notification
-        message={notificationMessage}
-        notificationClose={ () => setNotificationMessage(notificationMessageDefault) }
       />
     </div>
   )

@@ -1,14 +1,12 @@
 import { useAuth } from '@clerk/clerk-react';
 import { useRef, useState } from 'react';
 import { uploadAudio } from '../services/audioService';
-import { NotificationMessage } from '../types/NotificationMessage';
 
 interface Props {
-  updateNotification(message: NotificationMessage): void
   myAllAudios(): void
 }
 
-const useUploadAudio = ({ updateNotification, myAllAudios }: Props) => {
+const useUploadAudio = ({ myAllAudios }: Props) => {
   const { getToken } = useAuth();
   const [audioTitle, setAudioTitle] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -34,7 +32,7 @@ const useUploadAudio = ({ updateNotification, myAllAudios }: Props) => {
 
         if (message) throw new Error(message);
 
-        updateNotification({
+        console.log({
           text: successMessage,
           isError: false
         });
@@ -54,7 +52,7 @@ const useUploadAudio = ({ updateNotification, myAllAudios }: Props) => {
 
       if (error instanceof Error) msg = error.message
       
-      updateNotification({
+      console.log({
         text: msg,
         isError: true
       });

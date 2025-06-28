@@ -1,25 +1,19 @@
 import ShowAudios from '../components/ShowAudios';
-import Notification from '../components/Notification';
-import { notificationMessageDefault } from '../consts/notificationMessageDefault';
 import AudioUploadForm from '../components/AudioUploadForm';
 import { useState } from 'react';
 import useGetAudios from '../hooks/useGetAudios';
-import { NotificationMessage } from '../types/NotificationMessage';
 import useUploadAudio from '../hooks/useUploadAudio';
 
 const HomePage = () => {
 
   const [isRecordAudio, setIsRecordAudio] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
-
-  const updateNotification = (message: NotificationMessage) => setNotificationMessage(message);
 
   const {
     myAudios,
     isLoaded,
     myAllAudios,
     updateMyAudios
-  } = useGetAudios({ updateNotification });
+  } = useGetAudios();
   
   const {
     formRef,
@@ -28,7 +22,7 @@ const HomePage = () => {
     handleAudio,
     handleRecordAudio,
     updateAudioTitle,
-  } = useUploadAudio({ myAllAudios, updateNotification });
+  } = useUploadAudio({ myAllAudios });
 
   const updateIsRecordAudio = (isRecordAudio: boolean) => setIsRecordAudio(isRecordAudio);
   
@@ -51,10 +45,6 @@ const HomePage = () => {
         IsMyList={true}
         myAllAudios={myAllAudios}
         updateMyAudios={updateMyAudios}
-      />
-      <Notification
-        message={notificationMessage}
-        notificationClose={ () => updateNotification(notificationMessageDefault) }
       />
     </div>
   )

@@ -1,14 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { NotificationMessage } from "../types/NotificationMessage";
 import { useAuth } from "@clerk/clerk-react";
 import { getFavoriteAudios } from "../services/audioService";
 import { Audio } from "../types/Audio";
 
-interface Props {
-  updateNotification(message: NotificationMessage): void
-}
-
-const useGetFavoriteAudios = ({ updateNotification }: Props) => {
+const useGetFavoriteAudios = () => {
   const { getToken } = useAuth();
   const [audios, setAudios] = useState<Audio[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -32,7 +27,7 @@ const useGetFavoriteAudios = ({ updateNotification }: Props) => {
 
       if (error instanceof Error) msg = error.message
 
-      updateNotification({
+      console.log({
         text: msg,
         isError: true,
       });
@@ -41,7 +36,7 @@ const useGetFavoriteAudios = ({ updateNotification }: Props) => {
         
     }
 
-  }, [getToken, updateNotification]);
+  }, [getToken]);
 
   useEffect(() => {
 

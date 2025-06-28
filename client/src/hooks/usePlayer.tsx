@@ -1,13 +1,11 @@
 import { useAuth } from "@clerk/clerk-react";
-import { NotificationMessage } from "../types/NotificationMessage";
 import { addFavorite, addLike, deleteAudio, getAudio, removeFavorite, removeLike } from "../services/audioService";
 
 interface Props {
-  updateNotification(message: NotificationMessage): void
   myAllAudios(): void
 }
 
-const usePlayer = ({ updateNotification, myAllAudios }: Props) => {
+const usePlayer = ({ myAllAudios }: Props) => {
   const { getToken } = useAuth();
   
   const playAudio = async (audioId: string, title: string) => {
@@ -41,7 +39,7 @@ const usePlayer = ({ updateNotification, myAllAudios }: Props) => {
 
       if (error instanceof Error) msg = error.message
 
-      updateNotification({
+      console.log({
         text: msg,
         isError: true,
       })
@@ -59,7 +57,7 @@ const usePlayer = ({ updateNotification, myAllAudios }: Props) => {
 
       if (message) throw new Error(message)
 
-      updateNotification({
+      console.log({
         text: successMessage,
         isError: false,
       })
@@ -71,7 +69,7 @@ const usePlayer = ({ updateNotification, myAllAudios }: Props) => {
 
       if (error instanceof Error) msg = error.message
 
-      updateNotification({
+      console.log({
         text: msg,
         isError: true,
       })
@@ -94,7 +92,7 @@ const usePlayer = ({ updateNotification, myAllAudios }: Props) => {
 
       if (error instanceof Error) msg = error.message
 
-      updateNotification({
+      console.log({
         text: msg,
         isError: true,
       })
@@ -117,7 +115,7 @@ const usePlayer = ({ updateNotification, myAllAudios }: Props) => {
 
       if (error instanceof Error) msg = error.message
 
-      updateNotification({
+      console.log({
         text: msg,
         isError: true,
       })
@@ -139,7 +137,7 @@ const usePlayer = ({ updateNotification, myAllAudios }: Props) => {
 
       if (error instanceof Error) msg = error.message
 
-      updateNotification({
+      console.log({
         text: msg,
         isError: true,
       })
@@ -162,7 +160,7 @@ const usePlayer = ({ updateNotification, myAllAudios }: Props) => {
 
       if (error instanceof Error) msg = error.message
 
-      updateNotification({
+      console.log({
         text: msg,
         isError: true,
       })

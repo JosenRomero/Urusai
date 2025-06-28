@@ -1,8 +1,5 @@
 import { useRef, useState } from "react";
 import MicrophoneIcon from "../icons/MicrophoneIcon";
-import { NotificationMessage } from "../types/NotificationMessage";
-import { notificationMessageDefault } from "../consts/notificationMessageDefault";
-import Notification from "./Notification";
 
 interface Props {
   handleRecordAudio(audioBlob: Blob): void
@@ -16,7 +13,6 @@ const SoundRecorder = ({ handleRecordAudio, audioRef }: Props) => {
   // The MediaRecorder interface of the MediaStream Recording API
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [recording, setRecording] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
 
   const startRec = async () => {
     
@@ -52,7 +48,7 @@ const SoundRecorder = ({ handleRecordAudio, audioRef }: Props) => {
 
       if (error instanceof Error) msg = error.message
         
-      setNotificationMessage({
+      console.log({
         text: msg,
         isError: true
       });
@@ -98,11 +94,6 @@ const SoundRecorder = ({ handleRecordAudio, audioRef }: Props) => {
         </div>
       )}
 
-      <Notification
-        message={notificationMessage}
-        notificationClose={ () => setNotificationMessage(notificationMessageDefault) }
-      />
-      
     </div>
   )
 }

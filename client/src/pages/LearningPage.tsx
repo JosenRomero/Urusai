@@ -2,9 +2,6 @@ import { useState } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import { uploadAndAnalyzeAudio } from '../services/audioService';
 import SoundRecorder from '../components/SoundRecorder';
-import Notification from '../components/Notification';
-import { NotificationMessage } from '../types/NotificationMessage';
-import { notificationMessageDefault } from '../consts/notificationMessageDefault';
 
 const LearningPage = () => {
   const { getToken } = useAuth();
@@ -14,7 +11,6 @@ const LearningPage = () => {
   const [isLoaded, setIsLoaded] = useState<boolean | null>(null);
   const [text, setText] = useState<string | null>(null);
   const [isRecordAudio, setIsRecordAudio] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     
@@ -49,7 +45,7 @@ const LearningPage = () => {
 
       if (error instanceof Error) msg = error.message
         
-      setNotificationMessage({
+      console.log({
         text: msg,
         isError: true
       });
@@ -133,11 +129,6 @@ const LearningPage = () => {
       { isLoaded === false && <div className="loader mx-auto"></div> }
 
       { isLoaded && <p className="text-xl text-gray-900 ">{text}</p>}
-
-      <Notification
-        message={notificationMessage}
-        notificationClose={ () => setNotificationMessage(notificationMessageDefault) }
-      />
 
     </div>
   )

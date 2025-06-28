@@ -2,13 +2,8 @@ import { useAuth } from "@clerk/clerk-react";
 import { useCallback, useEffect, useState } from "react";
 import { getAudios } from "../services/audioService";
 import { Audio } from "../types/Audio";
-import { NotificationMessage } from "../types/NotificationMessage";
 
-interface Props {
-  updateNotification(message: NotificationMessage): void
-}
-
-const useGetAudios = ({ updateNotification }: Props) => {
+const useGetAudios = () => {
   const { getToken, userId } = useAuth();
   const [myAudios, setMyAudios] = useState<Audio[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -31,7 +26,7 @@ const useGetAudios = ({ updateNotification }: Props) => {
   
       if (error instanceof Error) msg = error.message
   
-      updateNotification({
+      console.log({
         text: msg,
         isError: true,
       });
@@ -40,7 +35,7 @@ const useGetAudios = ({ updateNotification }: Props) => {
   
     }
   
-  }, [getToken, userId, updateNotification]);
+  }, [getToken, userId]);
   
   useEffect(() => {
 

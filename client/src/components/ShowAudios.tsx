@@ -1,9 +1,5 @@
-import { useState } from 'react';
 import { Audio } from "../types/Audio";
 import PlayIcon from '../icons/PlayIcon';
-import { NotificationMessage } from '../types/NotificationMessage';
-import { notificationMessageDefault } from '../consts/notificationMessageDefault';
-import Notification from './Notification';
 import Trash from '../icons/Trash';
 import UserIcon from '../icons/UserIcon';
 import HeartIcon from '../icons/HeartIcon';
@@ -23,11 +19,8 @@ interface Props {
 }
 
 const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAudios }: Props) => {
-  const [notificationMessage, setNotificationMessage] = useState<NotificationMessage>(notificationMessageDefault);
-
-  const updateNotification = (message: NotificationMessage) => setNotificationMessage(message);
-
-  const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer({ updateNotification, myAllAudios });
+  
+  const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer({ myAllAudios });
 
   const btnLike = (audioId: string, currentValue: boolean, index: number) => {
 
@@ -129,11 +122,6 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAu
           </>
         )}
       </div>
-
-      <Notification
-        message={notificationMessage}
-        notificationClose={ () => setNotificationMessage(notificationMessageDefault) }
-      />
 
     </div>
   )
