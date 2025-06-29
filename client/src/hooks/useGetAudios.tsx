@@ -1,12 +1,14 @@
 import { useAuth } from "@clerk/clerk-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { getAudios } from "../services/audioService";
 import { Audio } from "../types/Audio";
+import MessageContext from "../context/MessageContext";
 
 const useGetAudios = () => {
   const { getToken, userId } = useAuth();
   const [myAudios, setMyAudios] = useState<Audio[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const { updateMessage } = useContext(MessageContext);
 
   const myAllAudios = useCallback( async () => {
   
@@ -23,7 +25,7 @@ const useGetAudios = () => {
         
     } catch (error) {
 
-      console.log({
+      updateMessage({
         text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
       });
@@ -32,7 +34,7 @@ const useGetAudios = () => {
   
     }
   
-  }, [getToken, userId]);
+  }, [getToken, userId, updateMessage]);
   
   useEffect(() => {
 

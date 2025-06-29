@@ -1,43 +1,49 @@
 import { useAuth } from "@clerk/clerk-react"
-import { useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Audio } from "../types/Audio";
 import { getAllAudios } from "../services/audioService";
 import ShowAudios from "../components/ShowAudios";
+import MessageContext from "../context/MessageContext";
 
 const AllAudiosPage = () => {
   const { getToken } = useAuth();
   const [audios, setAudios] = useState<Audio[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const { updateMessage } = useContext(MessageContext);
+
+  const allAudios = useCallback( async () => {
+
+    try {
+      const token = await getToken();
+      if (!token) throw new Error("Missing required fields");
+
+      const { allAudios, message } = await getAllAudios(token);
+
+      setIsLoaded(true);
+
+      if (message) throw new Error(message);
+
+      setAudios(allAudios);
+        
+    } catch (error) {
+      updateMessage({
+        text: (error instanceof Error) ? error.message : "Something went wrong.",
+        isError: true,
+      });
+
+      setIsLoaded(true);
+      
+    }
+
+  }, [getToken, updateMessage]);
   
   useEffect(() => {
 
-    const allAudios = async () => {
-
-      try {
-
-        const token = await getToken();
-        if (!token) throw new Error("Missing required fields");
-
-        const { allAudios, message } = await getAllAudios(token);
-
-        setIsLoaded(true);
-
-        if (message) throw new Error(message);
-
-        setAudios(allAudios);
-        
-      } catch (error) {
-        console.log({
-          text: (error instanceof Error) ? error.message : "Something went wrong.",
-          isError: true,
-        }); 
-      }
-
+    if (!isLoaded) {
+      allAudios();
     }
 
-    allAudios();
-
-  }, [getToken]);
+  }, [isLoaded, allAudios]);
 
   const updateAudios = (audios: Audio[]) => {
     setAudios(audios);

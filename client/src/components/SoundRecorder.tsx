@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import MicrophoneIcon from "../icons/MicrophoneIcon";
+import MessageContext from "../context/MessageContext";
 
 interface Props {
   handleRecordAudio(audioBlob: Blob): void
@@ -13,6 +14,7 @@ const SoundRecorder = ({ handleRecordAudio, audioRef }: Props) => {
   // The MediaRecorder interface of the MediaStream Recording API
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [recording, setRecording] = useState(false);
+  const { updateMessage } = useContext(MessageContext);
 
   const startRec = async () => {
     
@@ -44,7 +46,7 @@ const SoundRecorder = ({ handleRecordAudio, audioRef }: Props) => {
       setRecording(true);
 
     } catch (error) { 
-      console.log({
+      updateMessage({
         text: (error instanceof Error) ? error.message : "Error accessing the microphone.",
         isError: true
       });

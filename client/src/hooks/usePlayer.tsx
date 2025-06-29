@@ -1,5 +1,7 @@
 import { useAuth } from "@clerk/clerk-react";
 import { addFavorite, addLike, deleteAudio, getAudio, removeFavorite, removeLike } from "../services/audioService";
+import { useContext } from "react";
+import MessageContext from "../context/MessageContext";
 
 interface Props {
   myAllAudios(): void
@@ -7,6 +9,7 @@ interface Props {
 
 const usePlayer = ({ myAllAudios }: Props) => {
   const { getToken } = useAuth();
+  const { updateMessage } = useContext(MessageContext);
   
   const playAudio = async (audioId: string, title: string) => {
 
@@ -35,10 +38,10 @@ const usePlayer = ({ myAllAudios }: Props) => {
       audioTitle.innerHTML = title
 
     } catch (error) {
-      console.log({
+      updateMessage({
         text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
-      })
+      });
     }
 
   }
@@ -53,18 +56,18 @@ const usePlayer = ({ myAllAudios }: Props) => {
 
       if (message) throw new Error(message)
 
-      console.log({
+      updateMessage({
         text: successMessage,
         isError: false,
-      })
+      });
 
       myAllAudios(); // refresh audios list
 
     } catch (error) {
-      console.log({
+      updateMessage({
         text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
-      })
+      });
     }
 
   }
@@ -80,10 +83,10 @@ const usePlayer = ({ myAllAudios }: Props) => {
       if (message) throw new Error(message)
 
     } catch (error) {
-      console.log({
+      updateMessage({
         text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
-      })
+      });
     }
 
   }
@@ -99,10 +102,10 @@ const usePlayer = ({ myAllAudios }: Props) => {
       if (message) throw new Error(message)
       
     } catch (error) {
-      console.log({
+      updateMessage({
         text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
-      })
+      });
     }
   }
 
@@ -117,10 +120,10 @@ const usePlayer = ({ myAllAudios }: Props) => {
       if (message) throw new Error(message)
 
     } catch (error) {
-      console.log({
+      updateMessage({
         text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
-      })
+      });
     }
 
   }
@@ -136,10 +139,10 @@ const usePlayer = ({ myAllAudios }: Props) => {
       if (message) throw new Error(message)
       
     } catch (error) {
-      console.log({
+      updateMessage({
         text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true,
-      })
+      });
     }
   }
 

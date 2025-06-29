@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import { uploadAndAnalyzeAudio } from '../services/audioService';
 import SoundRecorder from '../components/SoundRecorder';
+import MessageContext from '../context/MessageContext';
 
 const LearningPage = () => {
   const { getToken } = useAuth();
@@ -11,6 +12,7 @@ const LearningPage = () => {
   const [isLoaded, setIsLoaded] = useState<boolean | null>(null);
   const [text, setText] = useState<string | null>(null);
   const [isRecordAudio, setIsRecordAudio] = useState(false);
+  const { updateMessage } = useContext(MessageContext);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     
@@ -41,7 +43,7 @@ const LearningPage = () => {
       }
 
     } catch (error) {
-      console.log({
+      updateMessage({
         text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true
       });

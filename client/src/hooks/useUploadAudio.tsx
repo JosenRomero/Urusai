@@ -1,6 +1,7 @@
 import { useAuth } from '@clerk/clerk-react';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { uploadAudio } from '../services/audioService';
+import MessageContext from '../context/MessageContext';
 
 interface Props {
   myAllAudios(): void
@@ -12,6 +13,7 @@ const useUploadAudio = ({ myAllAudios }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const { updateMessage } = useContext(MessageContext);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
@@ -32,7 +34,7 @@ const useUploadAudio = ({ myAllAudios }: Props) => {
 
         if (message) throw new Error(message);
 
-        console.log({
+        updateMessage({
           text: successMessage,
           isError: false
         });
@@ -48,7 +50,7 @@ const useUploadAudio = ({ myAllAudios }: Props) => {
       }
       
     } catch (error) {
-      console.log({
+      updateMessage({
         text: (error instanceof Error) ? error.message : "Something went wrong.",
         isError: true
       });
