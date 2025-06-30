@@ -8,6 +8,7 @@ import AllAudiosPage from '../pages/AllAudiosPage';
 import FavoriteAudiosPage from '../pages/FavoriteAudiosPage';
 import PresentationPage from '../pages/PresentationPage';
 import PublicRoute from './PublicRoute';
+import AudioPage from '../pages/AudioPage';
 
 const AppRouter = () => {
   return (
@@ -52,6 +53,14 @@ const AppRouter = () => {
               element={
                 <ProtectedRoute>
                   <FavoriteAudiosPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path='audio/:audioId' 
+              element={
+                <ProtectedRoute>
+                  <AudioPage />
                 </ProtectedRoute>
               }
             />

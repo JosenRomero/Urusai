@@ -220,6 +220,28 @@ class AudiosController {
 
   }
 
+  async getInfoAudio(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const audioId = req.params.audioId;
+
+      if (!audioId) throw { message: "AudioId is required", status: 400 }
+
+      const id = new mongoose.Types.ObjectId(audioId);
+
+      const audio = await Audio.findOne({ audioId });
+
+      if (!audio) throw { message: "Audio not found", status: 404 }
+
+      res.status(200).json({ audio });
+      
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
   async uploadAudio(req: Request, res: Response, next: NextFunction) {
 
     try {

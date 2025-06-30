@@ -32,4 +32,6 @@ router.post("/:audioId/favorite", requireAuth({ signInUrl: process.env.CLERK_SIG
 
 router.delete("/:audioId/removeFav", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.removeFavorite);
 
+router.get("/:audioId/infoAudio", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.getInfoAudio);
+
 export default router;

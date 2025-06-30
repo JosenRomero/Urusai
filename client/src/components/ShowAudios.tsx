@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { Audio } from "../types/Audio";
 import PlayIcon from '../icons/PlayIcon';
 import Trash from '../icons/Trash';
@@ -70,7 +71,7 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAu
                         </div>
 
                         <div className="flex flex-col flex-1">
-                          <p className="text-xl font-medium text-gray-900">{audio.title}</p>
+                          <NavLink to={`/audio/${audio.audioId}`} className={"text-xl font-medium !text-gray-900"}>{audio.title}</NavLink>
                           <p className="text-sm text-gray-500">{getAudioDate(audio.createdAt)}</p>
                         </div>
                       </div>
