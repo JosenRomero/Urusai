@@ -48,9 +48,14 @@ const useGetInfoAudio = ({ audioId }: Props) => {
 
   }, [isLoaded, infoAudio]);
 
+  const updateAudio = (audio: Audio) => {
+    setAudio(audio);
+  }
+
   return {
     audio,
-    isLoaded
+    isLoaded,
+    updateAudio
   }
 
 }
