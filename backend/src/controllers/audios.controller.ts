@@ -224,17 +224,49 @@ class AudiosController {
 
     try {
 
+      const { userId } = getAuth(req);
       const audioId = req.params.audioId;
 
+      if (!userId) throw { message: "User not authenticated", status: 401 }
       if (!audioId) throw { message: "AudioId is required", status: 400 }
 
-      const id = new mongoose.Types.ObjectId(audioId);
+      const audio = await Audio.aggregate([
+        {
+          $match: {
+            audioId: audioId
+          }
+        },
+        {
+          $lookup: {
+            from: "likes",
+            localField: "audioId", // Audio.audioId
+            foreignField: "audioId", // Like.audioId
+            as: "likes"
+          }
+        },
+        {
+          $lookup: {
+            from: "favorites",
+            localField: "audioId", // Audio.audioId
+            foreignField: "audioId", // Favorite.audioId
+            as: "favorites"
+          }
+        },
+        {
+          $addFields: {
+            userLike: {
+              $in: [userId, "$likes.userId"] // true if the user gave a like
+            },
+            userFavorite: {
+              $in: [userId, "$favorites.userId"] // true if the user gave a favorite
+            }
+          }
+        }
+      ]);
 
-      const audio = await Audio.findOne({ audioId });
+      if (!audio[0]) throw { message: "Audio not found", status: 404 }
 
-      if (!audio) throw { message: "Audio not found", status: 404 }
-
-      res.status(200).json({ audio });
+      res.status(200).json({ audio: audio[0] });
       
     } catch (error) {
       next(error);
