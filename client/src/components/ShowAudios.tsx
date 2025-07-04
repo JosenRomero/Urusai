@@ -1,6 +1,7 @@
 import { Audio } from "../types/Audio";
 import usePlayer from '../hooks/usePlayer';
 import ShowOneAudio from "./ShowOneAudio";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   title: string
@@ -12,6 +13,8 @@ interface Props {
 }
 
 const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAudios }: Props) => {
+
+  const location = useLocation();
   
   const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer({ myAllAudios });
 
@@ -30,13 +33,20 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAu
   const btnFavorite = (audioId: string, currentValue: boolean, index: number) => {
 
     const currentAudios = [...audios];
+    // In this paths remove the current audio
+    const paths = ["/favorite-audios"]
 
     if (!currentValue) favorite(audioId);
     else removeFav(audioId);
 
-    currentAudios[index].userFavorite = !currentValue;
-    updateMyAudios(currentAudios);
+    if (paths.includes(location.pathname)) {
+      currentAudios.splice(index, 1);
+    } else {
+      currentAudios[index].userFavorite = !currentValue;
+    }
 
+    updateMyAudios(currentAudios);
+    
   }
 
   return (
