@@ -42,7 +42,7 @@ const AudioPage = () => {
       { audio ? (
         <ShowOneAudio
           audio={audio}
-          showBtnRemoveAudio={false}
+          showBtnRemoveAudio={audio.ownAudio ?? false}
           index={0}
           btnLike={btnLike}
           btnFavorite={btnFavorite}

@@ -259,6 +259,9 @@ class AudiosController {
             },
             userFavorite: {
               $in: [userId, "$favorites.userId"] // true if the user gave a favorite
+            },
+            ownAudio: {
+              $eq: [userId, "$userId"] // true if the audio is owned by the user
             }
           }
         }

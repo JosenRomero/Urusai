@@ -12,4 +12,5 @@ export interface Audio {
   userLike: boolean
   favorites: Favorite[]
   userFavorite: boolean
+  ownAudio: boolean | undefined
 }
