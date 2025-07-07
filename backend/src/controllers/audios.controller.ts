@@ -8,6 +8,7 @@ import { Audio } from "../models/audioModel";
 import { Like } from "../models/likeModel";
 import mongoose from "mongoose";
 import { Favorite } from "../models/favoriteModel";
+import { Comment } from "../models/commentModel";
 
 class AudiosController {
 
@@ -509,6 +510,99 @@ class AudiosController {
       await Favorite.findOneAndDelete({ userId, audioId });
 
       res.status(200).json({ successMessage: "Favorite deleted" });
+      
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
+  async addComment(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const { userId } = getAuth(req);
+      const audioId = req.params.audioId;
+      const commentAudio = req.file;
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+      if (!audioId) throw { message: "AudioId is required", status: 400 }
+      if (!commentAudio) throw { message: "Audio is required", status: 400 }
+
+      // check the target audio
+      const file = await Audio.findOne({ audioId });
+
+      if (!file) throw { message: "Audio not found", status: 404 }
+
+      // check the number of comments
+      const allComments = await Comment.aggregate([
+        {
+          $match: { 
+            userId: userId 
+          }
+        }
+      ]);
+
+      if (allComments.length >= 5) throw { message: "You have reached the maximum number of comment uploads allowed (limit: 5)", status: 403 }
+
+      // upload commentAudio
+
+      const audioStream = fs.createReadStream(commentAudio.path);
+
+      const uploadStream = bucket.openUploadStream(commentAudio.filename);
+
+      await pipeline(audioStream, uploadStream);
+
+      // get imageUrl
+      const { imageUrl } = await clerkClient.users.getUser(userId);
+
+      // save comment
+      const newComment = new Comment({
+        userId,
+        audioId,
+        commentAudioId: uploadStream.id,
+        imageUrl,
+        mimeType: commentAudio.mimetype
+      });
+
+      await newComment.save();
+
+      fs.unlinkSync(commentAudio.path);
+
+      res.status(201).json({ successMessage: "Comment saved" });
+      
+    } catch (error) {
+
+      if (req.file?.path) fs.unlinkSync(req.file.path);
+      next(error);
+
+    }
+
+  }
+
+  async removeComment(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const { userId } = getAuth(req);
+      const { audioId, commentAudioId } = req.params;
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+      if (!audioId) throw { message: "AudioId is required", status: 400 }
+      if (!commentAudioId) throw { message: "commentAudioId is required", status: 400 }
+
+      // check the target audio
+      const file = await Audio.findOne({ audioId });
+
+      if (!file) throw { message: "Audio not found", status: 404 }
+
+      const commentAudio = await Comment.findOne({ userId, commentAudioId });
+
+      if (!commentAudio) throw { message: "comment not found", status: 400 }
+
+      await Comment.findOneAndDelete({ userId, commentAudioId });
+
+      res.status(200).json({ successMessage: "Comment deleted" });
       
     } catch (error) {
       next(error);
