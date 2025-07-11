@@ -155,3 +155,17 @@ export const getFavoriteAudios = async (token: string) => {
   return await response.json();
 
 }
+
+export const addComment = async (audioId: string, token: string, data: FormData) => {
+
+  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}/comment`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    },
+    body: data
+  })
+
+  return await response.json();
+  
+}

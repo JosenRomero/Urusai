@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import useGetInfoAudio from "../hooks/useGetInfoAudio";
 import ShowOneAudio from "../components/ShowOneAudio";
 import usePlayer from "../hooks/usePlayer";
+import CommentBox from "../components/CommentBox";
 
 const AudioPage = () => {
   const params = useParams();
@@ -36,23 +37,22 @@ const AudioPage = () => {
 
   if (!isLoaded) return <div className="loader mx-auto"></div>
 
+  if (!audio) return <div className="text-center">Unexpected error!</div>
+
   return (
-    <div className="sm:w-96 md:w-2xl mx-auto flex flex-col gap-y-16 p-4">
-
-      { audio ? (
-        <ShowOneAudio
-          audio={audio}
-          showBtnRemoveAudio={audio.ownAudio ?? false}
-          index={0}
-          btnLike={btnLike}
-          btnFavorite={btnFavorite}
-          btnRemoveAudio={removeAudio}
-          btnPlayAudio={playAudio}
-        />
-      ) : (
-        <div className="text-center">Unexpected error!</div>
-      )}
-
+    <div className="sm:w-96 md:w-2xl mx-auto flex flex-col gap-y-7 p-4">
+      <ShowOneAudio
+        audio={audio}
+        showBtnRemoveAudio={audio.ownAudio ?? false}
+        index={0}
+        btnLike={btnLike}
+        btnFavorite={btnFavorite}
+        btnRemoveAudio={removeAudio}
+        btnPlayAudio={playAudio}
+      />
+      <CommentBox
+        audioId={audio.audioId}
+      />
     </div>
   )
 }
