@@ -1,58 +1,44 @@
 import { useAuth } from "@clerk/clerk-react";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { getAudios } from "../services/audioService";
-import { Audio } from "../types/Audio";
+import { useCallback, useContext, useEffect } from "react";
+import AudiosContext from "../context/AudiosContext";
 import MessageContext from "../context/MessageContext";
 
 const useGetAudios = () => {
   const { getToken, userId } = useAuth();
-  const [myAudios, setMyAudios] = useState<Audio[]>([]);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const { audios, isLoadedAudios, fetchAudios, updateAudios } = useContext(AudiosContext);
   const { updateMessage } = useContext(MessageContext);
 
   const myAllAudios = useCallback( async () => {
-  
+
     try {
+
       const token = await getToken();
-      if (!token || !userId) throw new Error("Missing required fields");
-      const { audios, message } = await getAudios(userId, token);
-  
-      setIsLoaded(true);
-  
-      if (message) throw new Error(message);
-  
-      setMyAudios(audios);
-        
+      if (!token || !userId) throw new Error("Missing required fields")
+      fetchAudios(userId, token);
+      
     } catch (error) {
 
       updateMessage({
         text: (error instanceof Error) ? error.message : "Something went wrong.",
-        isError: true,
+        isError: true
       });
 
-      setIsLoaded(true);
-  
     }
-  
-  }, [getToken, userId, updateMessage]);
-  
+
+  }, [getToken, fetchAudios, userId, updateMessage])
+
   useEffect(() => {
 
-    if (!isLoaded) {
+    if (!isLoadedAudios) {
       myAllAudios();
     }
-    
-  }, [isLoaded, myAllAudios]);
 
-  const updateMyAudios = (audios: Audio[]) => {
-    setMyAudios(audios)
-  }
+  }, [isLoadedAudios, myAllAudios]);
 
   return {
-    myAudios,
-    isLoaded,
-    myAllAudios,
-    updateMyAudios
+    audios,
+    isLoadedAudios,
+    updateAudios
   }
 
 }

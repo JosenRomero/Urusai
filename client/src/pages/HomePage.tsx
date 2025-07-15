@@ -9,10 +9,9 @@ const HomePage = () => {
   const [isRecordAudio, setIsRecordAudio] = useState(false);
 
   const {
-    myAudios,
-    isLoaded,
-    myAllAudios,
-    updateMyAudios
+    audios,
+    isLoadedAudios,
+    updateAudios
   } = useGetAudios();
   
   const {
@@ -40,11 +39,11 @@ const HomePage = () => {
       />
       <ShowAudios
         title={"My Audios"}
-        audios={myAudios}
-        isLoaded={isLoaded}
+        audios={ audios ?? [] }
+        isLoaded={isLoadedAudios}
         IsMyList={true}
         myAllAudios={myAllAudios}
-        updateMyAudios={updateMyAudios}
+        updateMyAudios={updateAudios}
       />
     </div>
   )
