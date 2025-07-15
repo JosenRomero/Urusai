@@ -2,25 +2,23 @@ import { useAuth } from '@clerk/clerk-react';
 import { useContext, useRef, useState } from 'react';
 import { uploadAudio } from '../services/audioService';
 import MessageContext from '../context/MessageContext';
+import AudiosContext from '../context/AudiosContext';
 
-interface Props {
-  myAllAudios(): void
-}
-
-const useUploadAudio = ({ myAllAudios }: Props) => {
-  const { getToken } = useAuth();
+const useUploadAudio = () => {
+  const { getToken, userId } = useAuth();
   const [audioTitle, setAudioTitle] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const { updateMessage } = useContext(MessageContext);
+  const { fetchAudios } = useContext(AudiosContext);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
     try {
       e.preventDefault();
 
-      if (audioTitle && file) {
+      if (audioTitle && file && userId) {
 
         const formData = new FormData();
         formData.append("title", audioTitle);
@@ -43,7 +41,7 @@ const useUploadAudio = ({ myAllAudios }: Props) => {
         if (formRef.current) formRef.current.reset();
         if (audioRef.current) audioRef.current.remove();
 
-        myAllAudios();
+        fetchAudios(userId, token); // refresh audios
 
       } else {
         throw new Error("Missing required fields");

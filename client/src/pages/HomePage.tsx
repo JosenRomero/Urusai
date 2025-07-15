@@ -21,7 +21,7 @@ const HomePage = () => {
     handleAudio,
     handleRecordAudio,
     updateAudioTitle,
-  } = useUploadAudio({ myAllAudios });
+  } = useUploadAudio();
 
   const updateIsRecordAudio = (isRecordAudio: boolean) => setIsRecordAudio(isRecordAudio);
   
@@ -42,7 +42,6 @@ const HomePage = () => {
         audios={ audios ?? [] }
         isLoaded={isLoadedAudios}
         IsMyList={true}
-        myAllAudios={myAllAudios}
         updateMyAudios={updateAudios}
       />
     </div>
