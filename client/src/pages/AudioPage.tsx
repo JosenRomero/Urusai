@@ -7,7 +7,7 @@ import CommentBox from "../components/CommentBox";
 
 const AudioPage = () => {
   const params = useParams();
-  const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer({ myAllAudios: () => {} });
+  const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer();
 
   const { audio, isLoaded, updateAudio } = useGetInfoAudio({ audioId: params.audioId ?? "" });
 

@@ -2,14 +2,12 @@ import { useAuth } from "@clerk/clerk-react";
 import { addFavorite, addLike, deleteAudio, getAudio, removeFavorite, removeLike } from "../services/audioService";
 import { useContext } from "react";
 import MessageContext from "../context/MessageContext";
+import AudiosContext from "../context/AudiosContext";
 
-interface Props {
-  myAllAudios(): void
-}
-
-const usePlayer = ({ myAllAudios }: Props) => {
-  const { getToken } = useAuth();
+const usePlayer = () => {
+  const { getToken, userId } = useAuth();
   const { updateMessage } = useContext(MessageContext);
+  const { fetchAudios } = useContext(AudiosContext);
   
   const playAudio = async (audioId: string, title: string) => {
 
@@ -50,7 +48,7 @@ const usePlayer = ({ myAllAudios }: Props) => {
 
     try {
       const token = await getToken();
-      if (!token) throw new Error("Token is required")
+      if (!token || !userId) throw new Error("Missing required fields")
 
       const { successMessage, message } = await deleteAudio(audioId, token);
 
@@ -61,7 +59,7 @@ const usePlayer = ({ myAllAudios }: Props) => {
         isError: false,
       });
 
-      myAllAudios(); // refresh audios list
+      fetchAudios(userId, token); // refresh audios list
 
     } catch (error) {
       updateMessage({
