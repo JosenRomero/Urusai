@@ -56,7 +56,6 @@ const AllAudiosPage = () => {
         audios={audios}
         isLoaded={isLoaded}
         IsMyList={false}
-        myAllAudios={() => {}}
         updateMyAudios={ updateAudios }
       />
     </div>

@@ -12,7 +12,6 @@ const FavoriteAudiosPage = () => {
         audios={audios}
         isLoaded={isLoaded}
         IsMyList={false}
-        myAllAudios={() => {}}
         updateMyAudios={updateAudios}
       />
     </div>

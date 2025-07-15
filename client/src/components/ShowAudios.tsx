@@ -8,15 +8,14 @@ interface Props {
   audios: Audio[]
   isLoaded: boolean
   IsMyList: boolean
-  myAllAudios(): void
   updateMyAudios(audios: Audio[]): void
 }
 
-const ShowAudios = ({ title, audios, isLoaded, IsMyList, myAllAudios, updateMyAudios }: Props) => {
+const ShowAudios = ({ title, audios, isLoaded, IsMyList, updateMyAudios }: Props) => {
 
   const location = useLocation();
   
-  const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer({ myAllAudios });
+  const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer();
 
   const btnLike = (audioId: string, currentValue: boolean, index: number) => {
 
