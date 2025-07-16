@@ -32,6 +32,8 @@ router.post("/:audioId/favorite", requireAuth({ signInUrl: process.env.CLERK_SIG
 
 router.delete("/:audioId/removeFav", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.removeFavorite);
 
+router.get("/:audioId/comments", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.getComments);
+
 router.post("/:audioId/comment", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), multer.single('audio'), audiosController.addComment);
 
 router.delete("/:audioId/removeComment", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.removeComment);

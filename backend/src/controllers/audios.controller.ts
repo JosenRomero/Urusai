@@ -517,6 +517,68 @@ class AudiosController {
 
   }
 
+  async getComments(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const { userId } = getAuth(req);
+      const audioId = req.params.audioId;
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+      if (!audioId) throw { message: "AudioId is required", status: 400 }
+
+      const comments = await Comment.aggregate([
+        {
+          $match: {
+            audioId: audioId
+          }
+        },
+        {
+          $sort: {
+            createdAt: -1
+          }
+        },
+        // When a user likes a comment, the "commentAudioId" will be saved as "audioId" in the Like model
+        {
+          $lookup: {
+            from: "likes",
+            localField: "commentAudioId", // Comment.commentAudioId
+            foreignField: "audioId", // Like.audioId
+            as: "likes"
+          }
+        },
+        // When a user favorites a comment, the "commentAudioId" will be saved as "audioId" in the Favorite model
+        {
+          $lookup: {
+            from: "favorites",
+            localField: "commentAudioId", // Comment.commentAudioId
+            foreignField: "audioId", // Favorite.audioId
+            as: "favorites"
+          }
+        },
+        {
+          $addFields: {
+            userLike: {
+              $in: [userId, "$likes.userId"] // true if the user gave a like
+            },
+            userFavorite: {
+              $in: [userId, "$favorites.userId"] // true if the user gave a favorite
+            },
+            ownComment: {
+              $eq: [userId, "$userId"] // true if the comment is owned by the user
+            }
+          }
+        }
+      ]);
+
+      res.status(200).json({ comments });
+      
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
   async addComment(req: Request, res: Response, next: NextFunction) {
 
     try {
