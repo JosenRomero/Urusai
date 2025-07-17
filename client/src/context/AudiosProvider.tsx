@@ -11,7 +11,7 @@ export const AudiosProvider = ({ children }: Props) => {
 
   const { updateMessage } = useContext(MessageContext);
   const [audios, setAudios] = useState<Audio[]>([]);
-  const [comments, setComments] = useState<Audio | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [isLoadedAudios, setIsLoadedAudios] = useState<boolean>(false);
   const [isLoadedComments, setIsLoadedComments] = useState<boolean>(false);
 

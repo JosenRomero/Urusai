@@ -564,9 +564,15 @@ class AudiosController {
             userFavorite: {
               $in: [userId, "$favorites.userId"] // true if the user gave a favorite
             },
-            ownComment: {
+            ownAudio: {
               $eq: [userId, "$userId"] // true if the comment is owned by the user
-            }
+            },
+            audioId: "$commentAudioId" // Overwrites audioId with commentAudioId's value
+          }
+        },
+        {
+          $project: { 
+            commentAudioId: 0 // Specifies the suppression of the 'commentAudioId' field
           }
         }
       ]);
