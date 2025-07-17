@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useContext, useState } from "react"
 import AudiosContext from "./AudiosContext"
 import { Audio } from "../types/Audio";
 import MessageContext from "./MessageContext";
-import { getAudios } from "../services/audioService";
+import { getAudios, getComments } from "../services/audioService";
 
 interface Props {
   children: ReactNode
@@ -13,6 +13,7 @@ export const AudiosProvider = ({ children }: Props) => {
   const [audios, setAudios] = useState<Audio[]>([]);
   const [comments, setComments] = useState<Audio | null>(null);
   const [isLoadedAudios, setIsLoadedAudios] = useState<boolean>(false);
+  const [isLoadedComments, setIsLoadedComments] = useState<boolean>(false);
 
   const updateAudios = (audios: Audio[]) => setAudios(audios);
 
@@ -40,10 +41,14 @@ export const AudiosProvider = ({ children }: Props) => {
 
   }, [updateMessage]);
 
-  const fetchComments = useCallback( async () => {
+  const fetchComments = useCallback( async (audioId: string, token: string) => {
     
     try {
-      setComments(null);
+
+      if (!token || !audioId) throw new Error("Missing required fields");
+      const { comments, message } = await getComments(audioId, token);
+      if (message) throw new Error(message);
+      setComments(comments);
       
     } catch (error) {
 
@@ -52,13 +57,17 @@ export const AudiosProvider = ({ children }: Props) => {
         isError: true,
       });
 
+    } finally {
+
+      setIsLoadedComments(true);
+
     }
     
   }, [updateMessage]);
 
   return (
     <AudiosContext.Provider
-      value={{ audios, isLoadedAudios, comments, updateAudios, fetchAudios, fetchComments }}
+      value={{ audios, isLoadedAudios, comments, isLoadedComments, updateAudios, fetchAudios, fetchComments }}
     >
       {children}
     </AudiosContext.Provider>
