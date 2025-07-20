@@ -4,6 +4,7 @@ import useGetInfoAudio from "../hooks/useGetInfoAudio";
 import ShowOneAudio from "../components/ShowOneAudio";
 import usePlayer from "../hooks/usePlayer";
 import CommentBox from "../components/CommentBox";
+import CommentList from "../components/CommentList";
 
 const AudioPage = () => {
   const params = useParams();
@@ -53,6 +54,7 @@ const AudioPage = () => {
       <CommentBox
         audioId={audio.audioId}
       />
+      <CommentList audioId={audio.audioId} />
     </div>
   )
 }
