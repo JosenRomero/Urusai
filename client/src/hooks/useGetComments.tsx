@@ -1,7 +1,8 @@
 import { useAuth } from "@clerk/clerk-react"
-import { useCallback, useContext, useEffect } from "react";
-import AudiosContext from "../context/AudiosContext";
+import { useCallback, useContext, useEffect, useState } from "react";
 import MessageContext from "../context/MessageContext";
+import { getComments } from "../services/audioService";
+import { Comment } from "../types/Comment";
 
 interface Props {
   audioId: string
@@ -9,7 +10,8 @@ interface Props {
 
 const useGetComments = ({ audioId }: Props) => {
   const { getToken } = useAuth();
-  const { comments, isLoadedComments, fetchComments } = useContext(AudiosContext);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [isLoadedComments, setIsLoadedComments] = useState<boolean>(false);
   const { updateMessage } = useContext(MessageContext);
 
   const allComments = useCallback( async () => {
@@ -17,8 +19,10 @@ const useGetComments = ({ audioId }: Props) => {
     try {
 
       const token = await getToken();
-      if (!token) throw new Error("Missing required fields")
-      fetchComments(audioId, token)
+      if (!token || !audioId) throw new Error("Missing required fields")
+      const { comments, message } = await getComments(audioId, token);
+      if (message) throw new Error(message);
+      setComments(comments);
       
     } catch (error) {
 
@@ -27,9 +31,13 @@ const useGetComments = ({ audioId }: Props) => {
         isError: true
       });
 
+    } finally {
+
+      setIsLoadedComments(true);
+
     }
 
-  }, [getToken, updateMessage, fetchComments, audioId]);
+  }, [getToken, updateMessage, audioId]);
 
   useEffect(() => {
 
