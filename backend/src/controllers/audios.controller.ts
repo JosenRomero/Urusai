@@ -197,19 +197,21 @@ class AudiosController {
     try {
 
       const audioId = req.params.audioId;
+      const audioType = req.params.audioType;
 
       if (!audioId) throw { message: "AudioId is required", status: 400 }
-      
+      if (!audioType) throw { message: "audioType is required", status: 400 }
+
       const id = new mongoose.Types.ObjectId(audioId);
 
-      const file = await Audio.findOne({ audioId });
+      const audio = (audioType !== "commentAudio") ? await Audio.findOne({ audioId }) : await Comment.findOne({ audioId });
 
-      if (!file) throw { message: "Audio not found", status: 404 }
+      if (!audio) throw { message: "Audio not found", status: 404 }
 
       // create a stream to read from the bucket
       const downloadStream = bucket.openDownloadStream(id);
 
-      res.setHeader('Content-Type', file.mimeType);
+      res.setHeader('Content-Type', audio.mimeType);
       res.setHeader('Accept-Ranges', 'bytes');
 
       // pipe the stream to the response

@@ -25,9 +25,9 @@ export const getAudios = async (userId: string, token: string) => {
 
 }
 
-export const getAudio = async (audioId: string, token: string) => {
+export const getAudio = async (audioId: string, token: string, audioType: string = "audio") => {
 
-  return await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}`, {
+  return await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}/${audioType}`, {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${token}`

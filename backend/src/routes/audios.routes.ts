@@ -14,8 +14,6 @@ router.get("/favorite-audios", requireAuth({ signInUrl: process.env.CLERK_SIGN_I
 
 router.get("/my-audios/userId/:userId", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.getAudios);
 
-router.get("/:audioId", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.getAudio);
-
 router.post("/uploadAudio", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), multer.single('audio'), audiosController.uploadAudio);
 
 router.post("/uploadAndAnalyzeAudio", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), multer.single('audio'), audiosController.uploadAndAnalyzeAudio);
@@ -39,5 +37,7 @@ router.post("/:audioId/comment", requireAuth({ signInUrl: process.env.CLERK_SIGN
 router.delete("/:audioId/removeComment", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.removeComment);
 
 router.get("/:audioId/infoAudio", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.getInfoAudio);
+
+router.get("/:audioId/:audioType", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.getAudio);
 
 export default router;
