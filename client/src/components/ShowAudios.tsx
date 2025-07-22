@@ -2,20 +2,22 @@ import { Audio } from "../types/Audio";
 import usePlayer from '../hooks/usePlayer';
 import ShowOneAudio from "./ShowOneAudio";
 import { useLocation } from "react-router-dom";
+import { AudioType } from "../types/enums";
 
 interface Props {
   title: string
   audios: Audio[]
   isLoaded: boolean
   IsMyList: boolean
+  audioType?: AudioType
   updateMyAudios(audios: Audio[]): void
 }
 
-const ShowAudios = ({ title, audios, isLoaded, IsMyList, updateMyAudios }: Props) => {
+const ShowAudios = ({ title, audios, isLoaded, IsMyList, audioType = AudioType.AUDIO, updateMyAudios }: Props) => {
 
   const location = useLocation();
   
-  const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer();
+  const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer({ audioType });
 
   const btnLike = (audioId: string, currentValue: boolean, index: number) => {
 

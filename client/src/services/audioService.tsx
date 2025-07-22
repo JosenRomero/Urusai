@@ -1,3 +1,4 @@
+import { AudioType } from "../types/enums";
 
 export const getAllAudios = async (token: string) => {
 
@@ -25,7 +26,7 @@ export const getAudios = async (userId: string, token: string) => {
 
 }
 
-export const getAudio = async (audioId: string, token: string, audioType: string = "audio") => {
+export const getAudio = async (audioId: string, token: string, audioType: AudioType) => {
 
   return await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}/${audioType}`, {
     method: "GET",

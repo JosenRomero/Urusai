@@ -8,7 +8,7 @@ import CommentList from "../components/CommentList";
 
 const AudioPage = () => {
   const params = useParams();
-  const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer();
+  const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer({});
 
   const { audio, isLoaded, updateAudio } = useGetInfoAudio({ audioId: params.audioId ?? "" });
 

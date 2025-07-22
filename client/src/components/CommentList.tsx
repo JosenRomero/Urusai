@@ -1,5 +1,6 @@
 import useGetComments from "../hooks/useGetComments"
 import { Audio } from "../types/Audio";
+import { AudioType } from "../types/enums";
 import ShowAudios from "./ShowAudios";
 
 interface Props {
@@ -19,6 +20,7 @@ const CommentList = ({ audioId }: Props) => {
         audios={comments as (Audio[] | null) ?? []} // fisrt casting to Audio or null then the nullish coalescing operator
         isLoaded={isLoadedComments}
         IsMyList={false}
+        audioType={AudioType.COMMENT_AUDIO}
         updateMyAudios={() => {}}
       />
     </div>

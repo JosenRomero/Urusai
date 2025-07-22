@@ -204,7 +204,8 @@ class AudiosController {
 
       const id = new mongoose.Types.ObjectId(audioId);
 
-      const audio = (audioType !== "commentAudio") ? await Audio.findOne({ audioId }) : await Comment.findOne({ audioId });
+      // For comments list, the getComments controller -> Overwrites audioId with commentAudioId's value
+      const audio = (audioType !== "commentAudio") ? await Audio.findOne({ audioId }) : await Comment.findOne({ commentAudioId: audioId });
 
       if (!audio) throw { message: "Audio not found", status: 404 }
 

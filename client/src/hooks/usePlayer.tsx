@@ -3,8 +3,13 @@ import { addFavorite, addLike, deleteAudio, getAudio, removeFavorite, removeLike
 import { useContext } from "react";
 import MessageContext from "../context/MessageContext";
 import AudiosContext from "../context/AudiosContext";
+import { AudioType } from "../types/enums";
 
-const usePlayer = () => {
+interface Props {
+  audioType?: AudioType
+}
+
+const usePlayer = ({ audioType = AudioType.AUDIO }: Props) => {
   const { getToken, userId } = useAuth();
   const { updateMessage } = useContext(MessageContext);
   const { fetchAudios } = useContext(AudiosContext);
@@ -14,7 +19,7 @@ const usePlayer = () => {
     try {
       const token = await getToken();
       if (!token) throw new Error("Missing required fields")
-      const response = await getAudio(audioId, token);
+      const response = await getAudio(audioId, token, audioType);
 
       if (!response.ok) {
         const errData = await response.json();
