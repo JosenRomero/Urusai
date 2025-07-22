@@ -92,9 +92,9 @@ export const deleteAudio = async (audioId: string, token: string) => {
 
 }
 
-export const addLike = async (audioId: string, token: string) => {
+export const addLike = async (audioId: string, token: string, audioType: AudioType) => {
 
-  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}/like`, {
+  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}/like/${audioType}`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`
@@ -105,9 +105,9 @@ export const addLike = async (audioId: string, token: string) => {
   
 }
 
-export const removeLike = async (audioId: string, token: string) => {
+export const removeLike = async (audioId: string, token: string, audioType: AudioType) => {
 
-  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}/dislike`, {
+  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}/dislike/${audioType}`, {
     method: "DELETE",
     headers: {
       "Authorization": `Bearer ${token}`

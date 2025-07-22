@@ -81,7 +81,7 @@ const usePlayer = ({ audioType = AudioType.AUDIO }: Props) => {
       const token = await getToken();
       if (!token) throw new Error("Token is required")
 
-      const { message } = await addLike(audioId, token);
+      const { message } = await addLike(audioId, token, audioType);
 
       if (message) throw new Error(message)
 
@@ -100,7 +100,7 @@ const usePlayer = ({ audioType = AudioType.AUDIO }: Props) => {
       const token = await getToken();
       if (!token) throw new Error("Token is required")
 
-      const { message } = await removeLike(audioId, token);
+      const { message } = await removeLike(audioId, token, audioType);
 
       if (message) throw new Error(message)
       

@@ -409,13 +409,16 @@ class AudiosController {
     try {
       const { userId } = getAuth(req);
       const audioId = req.params.audioId;
+      const audioType = req.params.audioType;
 
       if (!userId) throw { message: "User not authenticated", status: 401 }
       if (!audioId) throw { message: "AudioId is required", status: 400 }
+      if (!audioType) throw { message: "audioType is required", status: 400 }
 
-      const file = await Audio.findOne({ audioId });
+      // For comments list, the getComments controller -> Overwrites audioId with commentAudioId's value
+      const audio = (audioType !== "commentAudio") ? await Audio.findOne({ audioId }) : await Comment.findOne({ commentAudioId: audioId });
 
-      if (!file) throw { message: "Audio not found", status: 404 }
+      if (!audio) throw { message: "Audio not found", status: 404 }
 
       const like = await Like.findOne({ userId, audioId });
 
@@ -440,13 +443,16 @@ class AudiosController {
     try {
       const { userId } = getAuth(req);
       const audioId = req.params.audioId;
+      const audioType = req.params.audioType;
 
       if (!userId) throw { message: "User not authenticated", status: 401 }
       if (!audioId) throw { message: "AudioId is required", status: 400 }
+      if (!audioType) throw { message: "audioType is required", status: 400 }
 
-      const file = await Audio.findOne({ audioId });
+      // For comments list, the getComments controller -> Overwrites audioId with commentAudioId's value
+      const audio = (audioType !== "commentAudio") ? await Audio.findOne({ audioId }) : await Comment.findOne({ commentAudioId: audioId });
 
-      if (!file) throw { message: "Audio not found", status: 404 }
+      if (!audio) throw { message: "Audio not found", status: 404 }
 
       const like = await Like.findOne({ userId, audioId });
 
