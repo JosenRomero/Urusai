@@ -118,9 +118,9 @@ export const removeLike = async (audioId: string, token: string, audioType: Audi
   
 }
 
-export const addFavorite = async (audioId: string, token: string) => {
+export const addFavorite = async (audioId: string, token: string, audioType: AudioType) => {
 
-  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}/favorite`, {
+  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}/favorite/${audioType}`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`
@@ -131,9 +131,9 @@ export const addFavorite = async (audioId: string, token: string) => {
   
 }
 
-export const removeFavorite = async (audioId: string, token: string) => {
+export const removeFavorite = async (audioId: string, token: string, audioType: AudioType) => {
 
-  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}/removeFav`, {
+  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}/removeFav/${audioType}`, {
     method: "DELETE",
     headers: {
       "Authorization": `Bearer ${token}`

@@ -26,9 +26,9 @@ router.post("/:audioId/like/:audioType", requireAuth({ signInUrl: process.env.CL
 
 router.delete("/:audioId/dislike/:audioType", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.removeLike);
 
-router.post("/:audioId/favorite", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.addFavorite);
+router.post("/:audioId/favorite/:audioType", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.addFavorite);
 
-router.delete("/:audioId/removeFav", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.removeFavorite);
+router.delete("/:audioId/removeFav/:audioType", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.removeFavorite);
 
 router.get("/:audioId/comments", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.getComments);
 

@@ -118,7 +118,7 @@ const usePlayer = ({ audioType = AudioType.AUDIO }: Props) => {
       const token = await getToken();
       if (!token) throw new Error("Token is required")
 
-      const { message } = await addFavorite(audioId, token);
+      const { message } = await addFavorite(audioId, token, audioType);
 
       if (message) throw new Error(message)
 
@@ -137,7 +137,7 @@ const usePlayer = ({ audioType = AudioType.AUDIO }: Props) => {
       const token = await getToken();
       if (!token) throw new Error("Token is required")
 
-      const { message } = await removeFavorite(audioId, token);
+      const { message } = await removeFavorite(audioId, token, audioType);
 
       if (message) throw new Error(message)
       
