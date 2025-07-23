@@ -2,7 +2,7 @@ import { useAuth } from "@clerk/clerk-react"
 import { useCallback, useContext, useEffect, useState } from "react";
 import MessageContext from "../context/MessageContext";
 import { getComments } from "../services/audioService";
-import { Comment } from "../types/Comment";
+import { Audio } from "../types/Audio";
 
 interface Props {
   audioId: string
@@ -10,7 +10,7 @@ interface Props {
 
 const useGetComments = ({ audioId }: Props) => {
   const { getToken } = useAuth();
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<Audio[]>([]);
   const [isLoadedComments, setIsLoadedComments] = useState<boolean>(false);
   const { updateMessage } = useContext(MessageContext);
 
@@ -47,9 +47,14 @@ const useGetComments = ({ audioId }: Props) => {
 
   }, [isLoadedComments, allComments]);
 
+  const updateComments = (comments: Audio[]) => {
+    setComments(comments);
+  }
+
   return {
     comments,
-    isLoadedComments
+    isLoadedComments,
+    updateComments
   }
 
 }

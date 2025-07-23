@@ -1,5 +1,4 @@
 import useGetComments from "../hooks/useGetComments"
-import { Audio } from "../types/Audio";
 import { AudioType } from "../types/enums";
 import ShowAudios from "./ShowAudios";
 
@@ -9,7 +8,7 @@ interface Props {
 
 const CommentList = ({ audioId }: Props) => {
 
-  const { comments, isLoadedComments } = useGetComments({ audioId });
+  const { comments, isLoadedComments, updateComments } = useGetComments({ audioId });
 
   if (!isLoadedComments) return <div className="loader mx-auto"></div>
 
@@ -17,11 +16,11 @@ const CommentList = ({ audioId }: Props) => {
     <div>
       <ShowAudios
         title="Comments"
-        audios={comments as (Audio[] | null) ?? []} // fisrt casting to Audio or null then the nullish coalescing operator
+        audios={comments}
         isLoaded={isLoadedComments}
         IsMyList={false}
         audioType={AudioType.COMMENT_AUDIO}
-        updateMyAudios={() => {}}
+        updateMyAudios={updateComments}
       />
     </div>
   )
