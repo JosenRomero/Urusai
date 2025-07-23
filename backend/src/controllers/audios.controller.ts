@@ -101,11 +101,25 @@ class AudiosController {
           }
         },
         {
+          $lookup: {
+            from: "comments",
+            localField: "audioId", // Favorite.audioId
+            foreignField: "commentAudioId", // Comment.commentAudioId
+            as: "commentAudio"
+          }
+        },
+        {
           $addFields: {
             userLike: {
               $in: [userId, "$likes.userId"] // true if the user gave a like
             },
-            userFavorite: true
+            userFavorite: true,
+            isCommentAudio: { $gt: [{ $size: "$commentAudio"}, 0] }
+          }
+        },
+        {
+          $match: {
+            isCommentAudio: false
           }
         },
         {
@@ -132,7 +146,9 @@ class AudiosController {
         },
         {
           $project: { 
-            audio: 0 // Specifies the suppression of the 'audio' field
+            audio: 0, // Specifies the suppression of the 'audio' field
+            commentAudio: 0
+
           }
         }
       ]);
