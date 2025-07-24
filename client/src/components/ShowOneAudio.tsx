@@ -29,7 +29,11 @@ const ShowOneAudio = ({ audio, showBtnRemoveAudio, index, btnLike, btnFavorite, 
 
       <div className="flex flex-row flex-1 items-center gap-5">
         <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
-          <UserIcon />
+          { audio.imageUrl ? (
+            <img src={audio.imageUrl} />
+          ) : (
+            <UserIcon />
+          )}
         </div>
         <div className="flex flex-col flex-1">
           <NavLink to={`/audio/${audio.audioId}`} className={"text-xl font-medium !text-gray-900"}>{audio.title}</NavLink>
