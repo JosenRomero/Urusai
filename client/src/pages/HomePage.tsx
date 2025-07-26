@@ -41,7 +41,7 @@ const HomePage = () => {
         title={"My Audios"}
         audios={ audios ?? [] }
         isLoaded={isLoadedAudios}
-        IsMyList={true}
+        IsMyList={false}
         updateMyAudios={updateAudios}
       />
     </div>

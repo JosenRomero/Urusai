@@ -20,7 +20,7 @@ const Modal = ({ children, title, isOpen, close }: Props) => {
       onClick={close}
     >
       <div
-        className="rounded-2xl bg-white px-5 py-10 shadow-md"
+        className="rounded-2xl bg-white p-5 shadow-md"
         onClick={ (e) => handleModalDialogClick(e) }
       >
         <div className="flex mb-5">

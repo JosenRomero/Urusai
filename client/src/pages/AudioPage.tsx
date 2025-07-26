@@ -1,14 +1,20 @@
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import useGetInfoAudio from "../hooks/useGetInfoAudio";
 import ShowOneAudio from "../components/ShowOneAudio";
 import usePlayer from "../hooks/usePlayer";
 import CommentBox from "../components/CommentBox";
 import CommentList from "../components/CommentList";
+import useModal from "../hooks/useModal";
+import { useState } from "react";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 const AudioPage = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer({});
+  const [currentAudioId, setCurrentAudioId] = useState<string>("");
+  const { isOpenModal, openModal, closeModal } = useModal();
 
   const { audio, isLoaded, updateAudio } = useGetInfoAudio({ audioId: params.audioId ?? "" });
 
@@ -36,6 +42,17 @@ const AudioPage = () => {
     updateAudio(currentAudio);
   }
 
+  const onConfirm = () => {
+    if (currentAudioId != "") removeAudio(currentAudioId);
+    closeModal();
+    navigate("/home");
+  }
+
+  const handleRemoveAudio = (audioId: string) => {
+    setCurrentAudioId(audioId);
+    openModal();
+  }
+
   if (!isLoaded) return <div className="loader mx-auto"></div>
 
   if (!audio) return <div className="text-center">Unexpected error!</div>
@@ -48,13 +65,18 @@ const AudioPage = () => {
         index={0}
         btnLike={btnLike}
         btnFavorite={btnFavorite}
-        btnRemoveAudio={removeAudio}
+        btnRemoveAudio={handleRemoveAudio}
         btnPlayAudio={playAudio}
       />
       <CommentBox
         audioId={audio.audioId}
       />
       <CommentList audioId={audio.audioId} />
+      <ConfirmationModal
+        isOpenModal={isOpenModal}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+      />
     </div>
   )
 }
