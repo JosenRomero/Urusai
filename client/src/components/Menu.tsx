@@ -29,7 +29,8 @@ const Menu = () => {
 
   }, []);
 
-  const handleMenu = () => {
+  const handleMenu = (isUL: boolean) => {
+    if (window.innerWidth >= 1280 && isUL) return
     if (menuBtn.current && sidebarRef.current) {
       menuBtn.current.classList.toggle("open");
       sidebarRef.current.classList.toggle("hidden");
@@ -56,7 +57,7 @@ const Menu = () => {
             />
             <button
               ref={menuBtn}
-              onClick={handleMenu}
+              onClick={ () => handleMenu(false)}
               aria-expanded="false"
               aria-controls="menuMobileContent"
               className="group relative flex h-5 w-6 cursor-pointer flex-col items-center justify-between transition duration-300 hover:scale-100"
@@ -72,7 +73,7 @@ const Menu = () => {
       </div>
       <SecondaryMenu
         ref={sidebarRef}
-        closeSecondaryMenu={handleMenu}
+        closeSecondaryMenu={ () => handleMenu(true)}
       />
     </nav>
   )
