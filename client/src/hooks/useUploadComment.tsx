@@ -3,7 +3,11 @@ import MessageContext from "../context/MessageContext"
 import { useAuth } from "@clerk/clerk-react";
 import { addComment } from "../services/audioService";
 
-const useUploadComment = () => {
+interface Props {
+  getComments(): void
+}
+
+const useUploadComment = ({ getComments }: Props) => {
   const { getToken } = useAuth();
   const [file, setFile] = useState<File | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -36,7 +40,7 @@ const useUploadComment = () => {
       if (formRef.current) formRef.current.reset();
       if (audioRef.current) audioRef.current.remove();
 
-      // TODO: update comments list
+      getComments();
       
     } catch (error) {
       updateMessage({

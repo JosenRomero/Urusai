@@ -8,6 +8,7 @@ import CommentList from "../components/CommentList";
 import useModal from "../hooks/useModal";
 import { useState } from "react";
 import ConfirmationModal from "../components/ConfirmationModal";
+import useGetComments from "../hooks/useGetComments";
 
 const AudioPage = () => {
   const params = useParams();
@@ -15,8 +16,9 @@ const AudioPage = () => {
   const { playAudio, removeAudio, like, dislike, favorite, removeFav } = usePlayer({});
   const [currentAudioId, setCurrentAudioId] = useState<string>("");
   const { isOpenModal, openModal, closeModal } = useModal();
-
   const { audio, isLoaded, updateAudio } = useGetInfoAudio({ audioId: params.audioId ?? "" });
+
+  const { comments, isLoadedComments, updateComments, allComments } = useGetComments({ audioId: audio?.audioId});
 
   const btnLike = (audioId: string, currentValue: boolean) => {
     if (!audio) return 
@@ -70,8 +72,13 @@ const AudioPage = () => {
       />
       <CommentBox
         audioId={audio.audioId}
+        getComments={allComments}
       />
-      <CommentList audioId={audio.audioId} />
+      <CommentList 
+        comments={comments}
+        isLoadedComments={isLoadedComments}
+        updateComments={updateComments}
+      />
       <ConfirmationModal
         isOpenModal={isOpenModal}
         closeModal={closeModal}

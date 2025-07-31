@@ -1,14 +1,14 @@
-import useGetComments from "../hooks/useGetComments"
+import { Audio } from "../types/Audio";
 import { AudioType } from "../types/enums";
 import ShowAudios from "./ShowAudios";
 
 interface Props {
-  audioId: string
+  comments: Audio[]
+  isLoadedComments: boolean
+  updateComments(comments: Audio[]): void
 }
 
-const CommentList = ({ audioId }: Props) => {
-
-  const { comments, isLoadedComments, updateComments } = useGetComments({ audioId });
+const CommentList = ({ comments, isLoadedComments, updateComments }: Props) => {
 
   if (!isLoadedComments) return <div className="loader mx-auto"></div>
 

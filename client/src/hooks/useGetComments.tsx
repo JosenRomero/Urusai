@@ -5,7 +5,7 @@ import { getComments } from "../services/audioService";
 import { Audio } from "../types/Audio";
 
 interface Props {
-  audioId: string
+  audioId: string | undefined
 }
 
 const useGetComments = ({ audioId }: Props) => {
@@ -41,11 +41,11 @@ const useGetComments = ({ audioId }: Props) => {
 
   useEffect(() => {
 
-    if (!isLoadedComments) {
+    if (!isLoadedComments && audioId) {
       allComments();
     }
 
-  }, [isLoadedComments, allComments]);
+  }, [isLoadedComments, audioId, allComments]);
 
   const updateComments = (comments: Audio[]) => {
     setComments(comments);
@@ -54,7 +54,8 @@ const useGetComments = ({ audioId }: Props) => {
   return {
     comments,
     isLoadedComments,
-    updateComments
+    updateComments,
+    allComments
   }
 
 }

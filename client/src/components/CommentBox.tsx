@@ -6,12 +6,13 @@ import SoundRecorder from "./SoundRecorder";
 
 interface Props {
   audioId: string
+  getComments(): void
 }
 
-const CommentBox = ({ audioId }: Props) => {
+const CommentBox = ({ audioId, getComments }: Props) => {
   const [isRecordAudio, setIsRecordAudio] = useState(false);
   const { isOpenModal, openModal, closeModal } = useModal();
-  const { formRef, audioRef, uploadComment, handleAudio, handleRecordAudio, updateFile } = useUploadComment();
+  const { formRef, audioRef, uploadComment, handleAudio, handleRecordAudio, updateFile } = useUploadComment({ getComments });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
