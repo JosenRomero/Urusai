@@ -396,16 +396,76 @@ class AudiosController {
       if (!userId) throw { message: "User not authenticated", status: 401 }
       if (!audioId) throw { message: "AudioId is required", status: 400 }
 
-      const audio = await Audio.findOneAndDelete({
+      // audio
+
+      const audioResult = await Audio.deleteOne({
         audioId,
         userId
       }).session(mongooseTransaction);
 
-      if (!audio) throw { message: "Audio not found or you do not have permission to delete it", status: 404 }
+      if (audioResult.deletedCount == 0) throw { message: "Audio not found or you do not have permission to delete it", status: 404 }
+
+      await Like.deleteMany({ audioId }).session(mongooseTransaction);
+
+      await Favorite.deleteMany({ audioId }).session(mongooseTransaction);
 
       const id = new mongoose.Types.ObjectId(audioId);
 
       await bucket.delete(id);
+
+      // comments
+
+      // get Comments
+      const comments = await Comment.aggregate([
+        {
+          $match: {
+            audioId: audioId
+          }
+        },
+        {
+          $project: {
+            commentAudioId: 1
+          }
+        }
+      ]);
+
+      if (comments.length > 0) {
+
+        // delete likes from each comment
+        await Promise.all(
+          comments.map((comment) => {
+            if (comment.commentAudioId) {
+              return Like.deleteMany({ audioId: comment.commentAudioId }).session(mongooseTransaction)
+            }
+            return Promise.resolve();
+          }) 
+        );
+
+        // delete favorites from each comment
+        await Promise.all(
+          comments.map((comment) => {
+            if (comment.commentAudioId) {
+              return Favorite.deleteMany({ audioId: comment.commentAudioId }).session(mongooseTransaction)
+            }
+            return Promise.resolve();
+          }) 
+        );
+
+        // delete comments
+        await Comment.deleteMany({ audioId }).session(mongooseTransaction)
+
+        // delete bucket from each comment
+        await Promise.all(
+          comments.map((comment) => {
+            if (comment.commentAudioId) {
+              const id = new mongoose.Types.ObjectId(comment.commentAudioId);
+              return bucket.delete(id)
+            }
+            return Promise.resolve();
+          })
+        );
+
+      }
 
       await mongooseTransaction.commitTransaction();
 
