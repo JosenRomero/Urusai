@@ -8,18 +8,20 @@ import HeartFilledIcon from "../icons/HeartFilledIcon"
 import HeartIcon from "../icons/HeartIcon"
 import Trash from "../icons/Trash"
 import PlayIcon from "../icons/PlayIcon"
+import { AudioType } from "../types/enums"
 
 interface Props {
   audio: Audio
   showBtnRemoveAudio: boolean
   index: number
+  audioType?: AudioType
   btnLike(audioId: string, currentValue: boolean, index: number): void
   btnFavorite(audioId: string, currentValue: boolean, index: number): void
   btnRemoveAudio(audioId: string): void
   btnPlayAudio(audioId: string, title: string): void
 }
 
-const ShowOneAudio = ({ audio, showBtnRemoveAudio, index, btnLike, btnFavorite, btnRemoveAudio, btnPlayAudio }: Props) => {
+const ShowOneAudio = ({ audio, showBtnRemoveAudio, index, audioType = AudioType.AUDIO, btnLike, btnFavorite, btnRemoveAudio, btnPlayAudio }: Props) => {
 
   return (
     <div
@@ -36,7 +38,11 @@ const ShowOneAudio = ({ audio, showBtnRemoveAudio, index, btnLike, btnFavorite, 
           )}
         </div>
         <div className="flex flex-col flex-1">
-          <NavLink to={`/audio/${audio.audioId}`} className={"text-xl font-medium !text-gray-900"}>{audio.title}</NavLink>
+          { audioType === AudioType.COMMENT_AUDIO ? (
+            <p className="text-xl font-medium text-gray-900">Comment #{index + 1}</p>
+          ) : (
+            <NavLink to={`/audio/${audio.audioId}`} className={"text-xl font-medium !text-gray-900"}>{audio.title}</NavLink>
+          ) }
           <p className="text-sm text-gray-500">{getAudioDate(audio.createdAt)}</p>
         </div>
       </div>
@@ -71,7 +77,7 @@ const ShowOneAudio = ({ audio, showBtnRemoveAudio, index, btnLike, btnFavorite, 
 
         <button
           className="w-5 h-5 inline-block hover:cursor-pointer hover:scale-125 transition"
-          onClick={ () => btnPlayAudio(audio.audioId, audio.title) }
+          onClick={ () => btnPlayAudio(audio.audioId, audio.title ?? `Comment #${index+1}`) }
         >
           <PlayIcon />
         </button>

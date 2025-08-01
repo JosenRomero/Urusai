@@ -67,6 +67,7 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, audioType = AudioType.A
                       audio={audio}
                       showBtnRemoveAudio={IsMyList}
                       index={index}
+                      audioType={audioType}
                       btnLike={btnLike}
                       btnFavorite={btnFavorite}
                       btnRemoveAudio={removeAudio}
@@ -76,7 +77,13 @@ const ShowAudios = ({ title, audios, isLoaded, IsMyList, audioType = AudioType.A
                 })}
               </>
             ) : (
-              <p className="w-full text-center mt-10">No saved audio files.</p>
+              <p className="w-full text-center mt-10">
+                { audioType === AudioType.COMMENT_AUDIO ? (
+                  <>No comments.</>
+                ) : (<>
+                  No saved audio files.
+                </>)}
+              </p>
             )}
           </>
         )}
