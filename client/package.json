@@ -13,6 +13,7 @@
     "@clerk/clerk-react": "^5.31.2",
     "@tailwindcss/vite": "^4.1.6",
     "react": "^19.0.0",
+    "react-awesome-reveal": "^4.3.1",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.6.0",
     "react-simple-typewriter": "^5.0.1",
