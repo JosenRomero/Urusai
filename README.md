@@ -29,13 +29,11 @@ Frontend:
 
 ## Screenshots
 
-![imagen 1](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/img1.png)
+![imagen 1](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/homePage_img.png)
 
-![imagen 2](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/img2.png)
+![imagen 2](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/allAudiosPage_img.png)
 
-![imagen 3](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/img3.png)
-
-![imagen 4](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/img4.png)
+![imagen 3](https://raw.githubusercontent.com/JosenRomero/Urusai/main/docs/learningPage_img.png)
 
 ## Demo
 
