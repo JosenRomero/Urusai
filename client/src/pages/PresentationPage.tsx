@@ -10,7 +10,7 @@ import demo_02 from "../../../assets/demo_02.gif";
 const PresentationPage = () => {
   return (
     <>
-      <header className='text-center mx-auto mt-30 px-4 sm:px-6 lg:px-8'>
+      <header className='text-center min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8'>
         <Fade>
           <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl">Where Your Audios Gets Feedback, Not Just Likes</h1>
           <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48">A social network for sharing audio clips, with AI-powered pronunciation and grammar feedback.</p>
@@ -24,8 +24,8 @@ const PresentationPage = () => {
         </SignUpButton>
       </header>
 
-      <section className="mt-60 py-30 bg-[#f8fafc]">
-        <Slide direction="left" triggerOnce delay={700}>
+      <section className="py-30 bg-gray-100">
+        <Slide direction="left" triggerOnce>
           <div className="container mx-auto text-center">
             <SectionTitle
               title="Why You'all Love Urusai"
@@ -67,14 +67,14 @@ const PresentationPage = () => {
           />
 
           <Slide direction="right" triggerOnce>
-            <div className="flex flex-col lg:flex-row gap-5 items-center">
-              <h3 className="flex-1 text-center text-2xl text-gray-900 lg:order-2">Share Your Audio in Seconds</h3>
+            <div className="flex flex-col xl:flex-row gap-5 items-center">
+              <h3 className="flex-1 text-center text-2xl text-gray-900 xl:order-2">Share Your Audio in Seconds</h3>
               <img className="border border-gray-200 lg:order-1" src={demo_01} />
             </div>
           </Slide>
 
           <Slide direction="left" triggerOnce>
-            <div className="flex flex-col lg:flex-row gap-5 items-center mt-40">
+            <div className="flex flex-col xl:flex-row gap-5 items-center mt-40">
               <h3 className="flex-1 text-center text-2xl text-gray-900">Get Instant AI Feedback</h3>
               <img className="border border-gray-200" src={demo_02} />
             </div>
@@ -116,7 +116,7 @@ const PresentationPage = () => {
         </Fade>
       </section>
 
-      <section className="mt-20 py-30 bg-[#f8fafc] px-4 sm:px-6 lg:px-8">
+      <section className="mt-20 py-30 bg-gray-100 px-4 sm:px-6 lg:px-8">
         <Fade triggerOnce>
           <div className="container mx-auto text-center">
             <SectionTitle 
