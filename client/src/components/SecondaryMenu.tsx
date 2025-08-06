@@ -1,10 +1,10 @@
 import { SignedIn } from '@clerk/clerk-react';
-import { NavLink } from "react-router-dom";
 import HeartIcon from "../icons/HeartIcon";
 import React, { useCallback } from 'react';
 import PlayListIcon from '../icons/PlayListIcon';
 import HomeIcon from '../icons/HomeIcon';
 import LearningIcon from '../icons/LearningIcon';
+import ItemLink from './ItemLink';
 
 interface Props {
   ref: React.Ref<HTMLDivElement>
@@ -27,22 +27,18 @@ const SecondaryMenu = ({ ref, closeSecondaryMenu }: Props) => {
       >
         <div className="h-full px-3 pb-4 overflow-y-auto border-l border-t border-gray-200 bg-white">
           <ul className="space-y-2 font-medium pt-5 px-2" ref={refUL}>
-            <NavLink to={"/home"} className={"flex items-center p-2 !text-gray-900 rounded-lg hover:bg-gray-100 group"}>
+            <ItemLink to={"/home"} text={"Home"}>
               <HomeIcon />
-              <span className="ms-3">Home</span>
-            </NavLink>
-            <NavLink to={"/all-audios"} className={"flex items-center p-2 !text-gray-900 rounded-lg hover:bg-gray-100 group"}>
+            </ItemLink>
+            <ItemLink to={"/all-audios"} text={"Latest audios"}>
               <PlayListIcon />
-              <span className="ms-3">Latest audios</span>
-            </NavLink>
-            <NavLink to={"/favorite-audios"} className={"flex items-center p-2 !text-gray-900 rounded-lg hover:bg-gray-100 group"}>
+            </ItemLink>
+            <ItemLink to={"/favorite-audios"} text={"Favorites"}>
               <HeartIcon />
-              <span className="ms-3">Favorites</span>
-            </NavLink>
-            <NavLink to={"/learning"} className={"flex items-center p-2 !text-gray-900 rounded-lg hover:bg-gray-100 group"}>
+            </ItemLink>
+            <ItemLink to={"/learning"} text={"Learning"}>
               <LearningIcon />
-              <span className="ms-3">Learning</span>
-            </NavLink>
+            </ItemLink>
           </ul>
         </div>
       </aside>

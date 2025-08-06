@@ -10,7 +10,7 @@ import demo_02 from "../../../assets/demo_02.gif";
 const PresentationPage = () => {
   return (
     <>
-      <header className='text-center min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8'>
+      <header className='text-center min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 -mt-20'>
         <Fade>
           <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl">Where Your Audios Gets Feedback, Not Just Likes</h1>
           <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48">A social network for sharing audio clips, with AI-powered pronunciation and grammar feedback.</p>
