@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { getAuth, clerkClient } from '@clerk/express';
+import { Webhook } from "svix";
 import { analyzeAudio } from "../services/aiService";
 import { pipeline } from "stream/promises";
 import fs from 'fs'; // file system
@@ -16,6 +17,47 @@ class AudiosController {
 
   unauthorized(req: Request, res: Response) {
     res.status(401).json({ message: "Unauthorized" });
+  }
+
+  handleUser(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const CLERK_WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET || ""
+
+      const svixId = req.headers['svix-id'];
+      const svixSignature = req.headers['svix-signature'];
+      const svixTimestamp = req.headers['svix-timestamp'];
+
+      if (!svixId || !svixSignature || !svixTimestamp) throw { message: "Missing Svix headers", status: 400 }
+
+      const payload = req.body;
+      const wh = new Webhook(CLERK_WEBHOOK_SECRET);
+
+      const event = wh.verify(JSON.stringify(payload), {
+        'svix-id': svixId[0],
+        'svix-signature': svixSignature[0],
+        'svix-timestamp': svixTimestamp[0]
+      }) as { data: any, type: string};
+
+      // const { id, username, imageUrl } = event.data;
+
+      // TODO: create, update or delete user
+      switch (event.type) {
+        case 'user.created':
+        case 'user.updated':
+          console.log(event.type);
+          break;
+        default:
+          break;
+      }
+
+      res.status(200).json({ message: "Success" });
+
+    } catch (error) {
+      next(error);
+    }
+
   }
 
   // get "all-audios"
