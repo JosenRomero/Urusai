@@ -23,7 +23,7 @@ const UserSchema = new Schema(
 interface IUser extends Document {
   userId: string;
   username: string;
-  imageUrl: string
+  imageUrl: string;
 }
 
 export const User = model<IUser>("User", UserSchema);

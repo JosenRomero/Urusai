@@ -34,14 +34,14 @@ class AudiosController {
 
       const { id, username, image_url } = event.data;
 
-      console.log("Success")
+      console.log("Success ", event.type)
       
       switch (event.type) {
         case 'user.created':
 
           const newUser = new User({
             userId: id,
-            username,
+            username: username ?? "unknown",
             imageUrl: image_url
           });
 
