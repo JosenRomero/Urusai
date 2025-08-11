@@ -34,28 +34,23 @@ class AudiosController {
 
       const { id, username, image_url } = event.data;
 
-      console.log("Success ", event.type)
-      
       switch (event.type) {
         case 'user.created':
-
           const newUser = new User({
             userId: id,
-            username: username ?? "unknown",
+            username: username || "unknown",
             imageUrl: image_url
           });
-
           await newUser.save();
-
+          break;
         case 'user.updated':
-
           await User.findOneAndUpdate({ userId: id }, { username, imageUrl: image_url });
-
+          break;
         case 'user.deleted':
-
           await User.findOneAndDelete({ userId: id });
-
+          break;
         default:
+          console.log(event.type)
           break;
       }
 
