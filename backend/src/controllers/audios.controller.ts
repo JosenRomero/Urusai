@@ -7,6 +7,7 @@ import fs from 'fs'; // file system
 import { bucket } from "../database/database";
 import { Audio } from "../models/audioModel";
 import { Like } from "../models/likeModel";
+import { User } from "../models/User";
 import mongoose from "mongoose";
 import { Favorite } from "../models/favoriteModel";
 import { Comment } from "../models/commentModel";
@@ -19,7 +20,7 @@ class AudiosController {
     res.status(401).json({ message: "Unauthorized" });
   }
 
-  handleUser(req: Request, res: Response, next: NextFunction) {
+  async handleUser(req: Request, res: Response, next: NextFunction) {
 
     try {
 
@@ -31,21 +32,32 @@ class AudiosController {
 
       const event = wh.verify(payload, headers) as { data: any, type: string};
 
-      // const { id, username, imageUrl } = event.data;
+      const { id, username, image_url } = event.data;
 
       console.log("Success")
-
-      // TODO: create, update or delete user
-      /*
+      
       switch (event.type) {
         case 'user.created':
+
+          const newUser = new User({
+            userId: id,
+            username,
+            imageUrl: image_url
+          });
+
+          await newUser.save();
+
         case 'user.updated':
+
+          await User.findOneAndUpdate({ userId: id }, { username, imageUrl: image_url });
+
         case 'user.deleted':
-          console.log(event.type);
-          break;
+
+          await User.findOneAndDelete({ userId: id });
+
         default:
           break;
-      }*/
+      }
 
       res.status(200).json({ message: "Success" });
 
