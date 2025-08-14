@@ -11,6 +11,7 @@ import { User } from "../models/User";
 import mongoose from "mongoose";
 import { Favorite } from "../models/favoriteModel";
 import { Comment } from "../models/commentModel";
+import { Relationship } from "../models/RelationshipModel";
 
 class AudiosController {
 
@@ -444,6 +445,45 @@ class AudiosController {
       
     }
     
+  }
+
+  async addFollow(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const { userId } = getAuth(req);
+      const targetUserId = req.params.targetUserId;
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+      if (!targetUserId) throw { message: "targetUserId is required", status: 400 }
+
+      // check target user
+      const { id } = await clerkClient.users.getUser(targetUserId);
+
+      if (!id) throw { message: "target User not found", status: 404 }
+
+      if (userId === targetUserId) throw { message: "Cannot follow yourself", status: 400 }
+
+      const isFollowing = await Relationship.findOne({
+        followerId: userId, // current user
+        followingId: targetUserId // target user
+      });
+
+      if (isFollowing) throw { message: "You already follow this user", status: 400 }
+
+      const newFollow = new Relationship({
+        followerId: userId,
+        followingId: targetUserId
+      });
+
+      await newFollow.save();
+
+      res.status(201).json({ successMessage: "Followed successfully" });
+      
+    } catch (error) {
+      next(error);
+    }
+
   }
 
   updateAudio(req: Request, res: Response, next: NextFunction) {
