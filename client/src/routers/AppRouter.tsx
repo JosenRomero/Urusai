@@ -9,6 +9,7 @@ import FavoriteAudiosPage from '../pages/FavoriteAudiosPage';
 import PresentationPage from '../pages/PresentationPage';
 import PublicRoute from './PublicRoute';
 import AudioPage from '../pages/AudioPage';
+import ProfilePage from '../pages/ProfilePage';
 
 const AppRouter = () => {
   return (
@@ -61,6 +62,14 @@ const AppRouter = () => {
               element={
                 <ProtectedRoute>
                   <AudioPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path='profile/:profileUserId'
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
                 </ProtectedRoute>
               }
             />

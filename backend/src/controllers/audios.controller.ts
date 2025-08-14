@@ -62,6 +62,29 @@ class AudiosController {
 
   }
 
+  // get "profile"
+  async getProfile(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const { userId } = getAuth(req);
+      const profileUserId = req.params.profileUserId;
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+      if (!profileUserId) throw { message: "profileUserId is required", status: 400 }
+
+      const profile = await User.findOne({ userId: profileUserId });
+
+      if (!profile) throw { message: "User not found", status: 404 }
+
+      res.status(200).json({ profile });
+      
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
   // get "all-audios"
   async getAllAudios(req: Request, res: Response, next: NextFunction) {
 

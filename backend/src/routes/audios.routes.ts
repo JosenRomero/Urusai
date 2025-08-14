@@ -10,6 +10,8 @@ router.get("/unauthorized", audiosController.unauthorized);
 
 router.post("/clerk-webhook", audiosController.handleUser);
 
+router.get("/profile/:profileUserId", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.getProfile);
+
 router.get("/all-audios", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.getAllAudios);
 
 router.get("/favorite-audios", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.getFavoriteAudios);

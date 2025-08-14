@@ -1,5 +1,18 @@
 import { AudioType } from "../types/enums";
 
+export const getProfile = async (profileUserId: string, token: string) => {
+
+  const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/profile/${profileUserId}`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+
+  return await response.json();
+
+}
+
 export const getAllAudios = async (token: string) => {
 
   const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/all-audios`, {
