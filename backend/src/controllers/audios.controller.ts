@@ -74,11 +74,23 @@ class AudiosController {
       if (!userId) throw { message: "User not authenticated", status: 401 }
       if (!profileUserId) throw { message: "profileUserId is required", status: 400 }
 
-      const profile = await User.findOne({ userId: profileUserId });
+      const isOwnProfile = userId === profileUserId
+      let following = null;
 
-      if (!profile) throw { message: "User not found", status: 404 }
+      const user = await User.findOne({ userId: profileUserId });
 
-      res.status(200).json({ profile });
+      if (!user) throw { message: "User not found", status: 404 }
+
+      if (!isOwnProfile) {
+
+        following = await Relationship.findOne({
+          followerId: userId, // current user
+          followingId: profileUserId // target user
+        });
+
+      }
+
+      res.status(200).json({ user, isOwnProfile, isFollowing: following != null });
       
     } catch (error) {
       next(error);
