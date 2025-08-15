@@ -5,6 +5,7 @@ export interface Audio {
   _id: string
   title: string
   audioId: string
+  userId: string
   imageUrl: string
   mimeType: string
   createdAt: string

@@ -32,7 +32,9 @@ const ShowOneAudio = ({ audio, showBtnRemoveAudio, index, audioType = AudioType.
       <div className="flex flex-row flex-1 items-center gap-5">
         <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
           { audio.imageUrl ? (
-            <img src={audio.imageUrl} />
+            <NavLink to={`/profile/${audio.userId}`}>
+              <img src={audio.imageUrl} />
+            </NavLink>
           ) : (
             <UserIcon />
           )}
