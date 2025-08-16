@@ -498,6 +498,41 @@ class AudiosController {
 
   }
 
+  async unFollow(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const { userId } = getAuth(req);
+      const targetUserId = req.params.targetUserId;
+
+      if (!userId) throw { message: "User not authenticated", status: 401 }
+      if (!targetUserId) throw { message: "targetUserId is required", status: 400 }
+
+      // check target user
+      const { id } = await clerkClient.users.getUser(targetUserId);
+
+      if (!id) throw { message: "target User not found", status: 404 }
+
+      const isFollowing = await Relationship.findOne({
+        followerId: userId, // current user
+        followingId: targetUserId // target user
+      });
+
+      if (!isFollowing) throw { message: "following not found", status: 404 }
+
+      await Relationship.findOneAndDelete({
+        followerId: userId,
+        followingId: targetUserId
+      });
+
+      res.status(200).json({ successMessage: "following deleted" });
+      
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
   updateAudio(req: Request, res: Response, next: NextFunction) {
     res.json({ message: "update audio" });
   }

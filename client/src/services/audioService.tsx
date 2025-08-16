@@ -105,6 +105,19 @@ export const addFollow = async (targetUserId: string, token: string) => {
 
 }
 
+export const removeFollow = async (targetUserId: string, token: string) => {
+
+  const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/unFollow/${targetUserId}`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+
+  return await response.json();
+
+}
+
 export const deleteAudio = async (audioId: string, token: string) => {
 
   const response =  await fetch(`${import.meta.env.VITE_APP_API_URL}/${audioId}`, {

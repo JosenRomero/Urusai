@@ -24,6 +24,8 @@ router.post("/uploadAndAnalyzeAudio", requireAuth({ signInUrl: process.env.CLERK
 
 router.post("/follow/:targetUserId", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.addFollow);
 
+router.delete("/unFollow/:targetUserId", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.unFollow);
+
 router.put("/:audioId", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.updateAudio);
 
 router.delete("/:audioId", requireAuth({ signInUrl: process.env.CLERK_SIGN_IN_URL }), audiosController.deleteAudio);

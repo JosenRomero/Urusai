@@ -1,7 +1,7 @@
 import { useAuth } from "@clerk/clerk-react"
 import { useCallback, useContext, useEffect, useState } from "react";
 import MessageContext from "../context/MessageContext";
-import { addFollow, getProfile } from "../services/audioService";
+import { addFollow, getProfile, removeFollow } from "../services/audioService";
 import { User } from "../types/User";
 
 interface Props {
@@ -69,7 +69,23 @@ const useGetProfile = ({ profileUserId }: Props) => {
 
   }
 
-  const unFollow = () => {}
+  const unFollow = async () => {
+
+    try {
+      const token = await getToken();
+      if (!token) throw new Error("Missing required fields");
+      const { message } = await removeFollow(profileUserId, token);
+
+      if (message) throw new Error(message);
+      
+    } catch (error) {
+      updateMessage({
+        text: (error instanceof Error) ? error.message : "Something went wrong.",
+        isError: true,
+      });
+    }
+
+  }
 
   return {
     profile,
