@@ -590,6 +590,63 @@ class AudiosController {
 
   }
 
+  async getFollowings(req: Request, res: Response, next: NextFunction) {
+
+    try {
+
+      const targetUserId = req.params.targetUserId;
+      if (!targetUserId) throw { message: "targetUserId is required", status: 400 }
+
+      // check target user
+      const { id } = await clerkClient.users.getUser(targetUserId);
+
+      if (!id) throw { message: "target User not found", status: 404 }
+
+      const followings = await Relationship.aggregate([
+        {
+          $match: {
+            followerId: targetUserId
+          }
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "followingId", // Relationship.followingId
+            foreignField: "userId", // User.userId
+            as: "user"
+          }
+        },
+        {
+          /**
+           * Result: { followingId, followerId, user, userId, username, imageUrl, ... }
+           * Instead of { followingId, followerId, user: [ {userId, username, imageUrl, ...} ], ... }
+          */
+         $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [
+              { $arrayElemAt: ["$user", 0] },
+              "$$ROOT"
+            ]
+          }
+         }
+        },
+        {
+          $project: {
+            user: 0, // Specifies the suppression of the 'user' field
+            followingId: 0,
+            followerId: 0
+          }
+        }
+      ]);
+
+      res.status(200).json({ followings });
+      
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
   updateAudio(req: Request, res: Response, next: NextFunction) {
     res.json({ message: "update audio" });
   }
