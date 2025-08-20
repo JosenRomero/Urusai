@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import useGetProfile from "../hooks/useGetProfile";
 import { User } from "../types/User";
+import ProfileTabs from "../components/ProfileTabs";
 
 const ProfilePage = () => {
   const params = useParams();
@@ -40,6 +41,7 @@ const ProfilePage = () => {
 
         </div>
       </div>
+      <ProfileTabs profileUserId={params.profileUserId ?? ""} />
     </div>
   )
 }
