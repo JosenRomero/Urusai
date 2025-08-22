@@ -66,7 +66,7 @@ const LearningPage = () => {
   }
 
   return (
-    <div className="sm:w-96 md:w-2xl mx-auto">
+    <div className="sm:w-96 md:w-2xl mx-auto p-4">
       { isLoaded === null && (
         <form className="rounded-2xl bg-white px-4 py-10 shadow-md ring-1 ring-black/5 sm:px-8" onSubmit={handleSubmit}>
           
@@ -126,7 +126,7 @@ const LearningPage = () => {
 
       { isLoaded === false && <div className="loader mx-auto"></div> }
 
-      { isLoaded && <p className="text-xl text-gray-900 ">{text}</p>}
+      { isLoaded && <p className="text-xl text-gray-900">{text}</p>}
 
     </div>
   )
