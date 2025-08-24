@@ -11,20 +11,23 @@ const PresentationPage = () => {
   return (
     <>
       <header className='text-center min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 -mt-20'>
+        <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
+          <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#C9EBFF,transparent)]"></div>
+        </div>
         <Fade>
           <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl">Where Your Audios Gets Feedback, Not Just Likes</h1>
           <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48">A social network for sharing audio clips, with AI-powered pronunciation and grammar feedback.</p>
         </Fade>
         <SignUpButton mode={"modal"} signInForceRedirectUrl={"home"}>
           <button 
-            className="text-white bg-blue-700 hover:bg-blue-800 hover:cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
+            className="z-10 text-white bg-blue-700 hover:bg-blue-800 hover:cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
           >
             Get Started
           </button>
         </SignUpButton>
       </header>
 
-      <section className="py-30 bg-gray-100">
+      <section className="py-30 bg-blue-50">
         <Slide direction="left" triggerOnce>
           <div className="container mx-auto text-center">
             <SectionTitle
@@ -66,24 +69,24 @@ const PresentationPage = () => {
             subtitle=""
           />
 
-          <Slide direction="right" triggerOnce>
+          <Slide direction="left" triggerOnce>
             <div className="flex flex-col xl:flex-row gap-5 items-center">
               <h3 className="flex-1 text-center text-2xl text-gray-900 xl:order-2">Share Your Audio in Seconds</h3>
-              <img className="border border-gray-200 lg:order-1" src={demo_01} />
+              <img className="border border-gray-200 lg:order-1 shadow-2xl" src={demo_01} />
             </div>
           </Slide>
 
           <Slide direction="left" triggerOnce>
             <div className="flex flex-col xl:flex-row gap-5 items-center mt-40">
               <h3 className="flex-1 text-center text-2xl text-gray-900">Get Instant AI Feedback</h3>
-              <img className="border border-gray-200" src={demo_02} />
+              <img className="border border-gray-200 shadow-2xl" src={demo_02} />
             </div>
           </Slide>
 
         </div>
       </section>
 
-      <section className="mt-20 py-30 px-4 sm:px-6 lg:px-8">
+      <section className="mt-20 py-30 px-4 sm:px-6 lg:px-8 bg-blue-50">
         <Fade triggerOnce>
           <div className="container mx-auto text-center">
             <SectionTitle
@@ -116,9 +119,9 @@ const PresentationPage = () => {
         </Fade>
       </section>
 
-      <section className="mt-20 py-30 bg-gray-100 px-4 sm:px-6 lg:px-8">
+      <section className="py-30 bg-blue-300 px-4 sm:px-6 lg:px-8">
         <Fade triggerOnce>
-          <div className="container mx-auto text-center">
+          <div className="container mx-auto text-center [&_*]:text-slate-800">
             <SectionTitle 
               title="Current Limits" 
               subtitle="For now, enjoy 5 free audio uploads and 5 comments."

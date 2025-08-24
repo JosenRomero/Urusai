@@ -38,7 +38,7 @@ const Menu = () => {
   }
 
   return (
-    <nav className='p-4 border-b border-gray-200 z-11'>
+    <nav className='p-4 border-b border-gray-200 z-11 bg-white'>
       <div className='mx-auto flex items-center justify-between gap-x-1'>
         <div className='flex gap-1 items-center font-medium text-sm md:text-xl px-5 py-2.5 min-w-25'>
           <Typewriter words={["ウルサイ", "Noisy", "Ruidoso"]} loop={false} cursor={true} />
